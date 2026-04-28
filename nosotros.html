@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nosotros · Idiazabal Inversiones & Bienes Raíces</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9912E;--gold-l:#DFB25A;--gold-d:#8B6214;
+  --cream:#FAF8F3;--cream2:#F4F1EA;--white:#FFFFFF;
+  --stone:#4A4A48;--nav-bg:#5A5855;
+  --border:#E4E0D6;--light:#AEABA2;--mid:#6B6866;--dark:#1E1E1C;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito Sans',sans-serif;background:var(--cream);color:var(--dark);}
+
+/* NAV */
+nav{background:var(--nav-bg);padding:0 4rem;display:flex;align-items:center;justify-content:space-between;height:66px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,145,46,0.18);}
+.nav-logo{text-decoration:none;}
+.nav-brand{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:19px;font-weight:500;letter-spacing:1px;line-height:1.1;}
+.nav-brand span{display:block;font-family:'Nunito Sans',sans-serif;font-size:8.5px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-weight:600;}
+.nav-links{display:flex;gap:2rem;}
+.nav-links a{color:rgba(245,242,236,0.6);font-size:12.5px;text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.nav-links a:hover{color:var(--gold);}
+.nav-cta{background:transparent;color:var(--gold);padding:7px 18px;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border:1px solid rgba(201,145,46,0.45);font-family:'Nunito Sans',sans-serif;transition:all 0.25s;}
+.nav-cta:hover{background:var(--gold);color:var(--nav-bg);}
+
+/* HERO */
+.hero{background:var(--nav-bg);padding:48px 4rem 44px;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent);}
+.hero-inner{max-width:680px;}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:10px;font-weight:700;}
+.hero h1{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:38px;line-height:1.1;font-weight:400;margin-bottom:12px;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero p{color:rgba(245,242,236,0.5);font-size:13.5px;line-height:1.8;font-weight:300;max-width:560px;}
+
+/* STATS */
+.stats-strip{background:var(--cream2);border-bottom:1px solid var(--border);padding:28px 4rem;}
+.stats-inner{display:flex;justify-content:center;gap:0;max-width:700px;margin:0 auto;}
+.stat{flex:1;text-align:center;padding:0 20px;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:38px;font-weight:600;color:var(--dark);}
+.stat-label{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-top:4px;}
+
+/* HISTORIA */
+.historia-section{padding:88px 4rem;}
+.historia-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;max-width:1060px;}
+.historia-left{}
+.sec-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--dark);margin-bottom:18px;font-weight:400;line-height:1.15;}
+.sec-title em{font-style:italic;color:var(--gold);}
+.historia-text{font-size:14px;color:var(--mid);line-height:1.9;font-weight:300;}
+.historia-text p{margin-bottom:16px;}
+.historia-text p:last-child{margin-bottom:0;}
+.historia-right{}
+.valores-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);}
+.valor{background:var(--white);padding:28px 24px;transition:background 0.2s;}
+.valor:hover{background:var(--cream);}
+.valor-icon{width:36px;height:36px;background:rgba(201,145,46,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.valor h4{font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--dark);margin-bottom:6px;font-weight:500;}
+.valor p{font-size:12.5px;color:var(--mid);line-height:1.7;font-weight:300;}
+
+/* EQUIPO */
+.equipo-section{background:var(--white);padding:88px 4rem;border-top:1px solid var(--border);}
+.equipo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:52px;}
+.miembro{background:var(--cream);border:1px solid var(--border);overflow:hidden;transition:all 0.3s;}
+.miembro:hover{box-shadow:0 6px 28px rgba(0,0,0,0.07);transform:translateY(-2px);}
+.miembro-foto{height:220px;background:linear-gradient(140deg,var(--nav-bg),var(--stone));display:flex;align-items:center;justify-content:center;position:relative;}
+.miembro-inicial{font-family:'Cormorant Garamond',serif;font-size:64px;color:rgba(201,145,46,0.25);font-weight:600;}
+.miembro-body{padding:22px 20px;}
+.miembro-body h3{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dark);font-weight:500;margin-bottom:3px;}
+.miembro-cargo{font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px;}
+.miembro-bio{font-size:13px;color:var(--mid);line-height:1.75;font-weight:300;}
+.miembro-mat{font-size:11px;color:var(--light);margin-top:10px;}
+
+/* VALORES / MISION */
+.mision-section{padding:88px 4rem;background:var(--nav-bg);position:relative;}
+.mision-section::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.mision-inner{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.06);margin-top:52px;}
+.mision-item{padding:36px 32px;background:rgba(255,255,255,0.03);}
+.mision-item-label{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:700;}
+.mision-item h3{font-family:'Cormorant Garamond',serif;font-size:24px;color:#F5F2EC;margin-bottom:12px;font-weight:400;}
+.mision-item h3 em{font-style:italic;color:var(--gold);}
+.mision-item p{font-size:13.5px;color:rgba(245,242,236,0.4);line-height:1.85;font-weight:300;}
+
+/* CONTACTO */
+.contacto-section{padding:88px 4rem;background:var(--cream);}
+.contacto-inner{display:grid;grid-template-columns:1fr 1fr;gap:72px;max-width:1060px;}
+.contacto-left h2{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--dark);font-weight:400;line-height:1.15;margin-bottom:14px;}
+.contacto-left h2 em{font-style:italic;color:var(--gold);}
+.contacto-left p{font-size:14px;color:var(--mid);line-height:1.85;font-weight:300;margin-bottom:32px;}
+.contacto-datos{display:flex;flex-direction:column;gap:16px;}
+.dato{display:flex;gap:14px;align-items:flex-start;}
+.dato-icon{width:38px;height:38px;background:rgba(201,145,46,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.dato-text strong{font-size:13px;color:var(--dark);display:block;font-weight:600;margin-bottom:2px;}
+.dato-text span{font-size:13px;color:var(--mid);}
+.mapa-box{height:180px;background:linear-gradient(135deg,#e8f0e8,#d8e8d8);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;margin-top:24px;}
+.mapa-pin{position:absolute;}
+.mapa-label{position:absolute;bottom:12px;left:12px;background:rgba(255,255,255,0.9);font-size:11px;color:var(--mid);padding:4px 10px;font-weight:700;}
+
+/* FORM CONTACTO */
+.form-card{background:var(--white);border:1px solid var(--border);padding:32px;}
+.form-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);margin-bottom:6px;font-weight:500;}
+.form-card > p{font-size:12.5px;color:var(--light);margin-bottom:24px;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.field label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;}
+.field input,.field select,.field textarea{padding:10px 12px;border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s;appearance:none;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);}
+.field textarea{resize:none;height:90px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-submit{width:100%;padding:13px;background:var(--stone);color:#F5F2EC;border:none;font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;letter-spacing:0.5px;cursor:pointer;transition:background 0.2s;margin-top:4px;}
+.form-submit:hover{background:var(--gold);color:var(--dark);}
+.wa-btn{width:100%;padding:11px;background:transparent;color:#25D366;border:1px solid #25D366;font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.wa-btn:hover{background:#25D366;color:#fff;}
+.form-privacy{font-size:11px;color:var(--light);text-align:center;margin-top:10px;}
+
+/* FOOTER */
+footer{background:#3A3836;padding:44px 4rem 24px;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:44px;margin-bottom:40px;}
+.footer-name{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:18px;font-weight:500;letter-spacing:1px;}
+.footer-sub{font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-weight:600;}
+.footer-brand p{font-size:12.5px;color:rgba(245,242,236,0.28);line-height:1.8;margin-top:12px;max-width:240px;font-weight:300;}
+.footer-col h4{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:700;}
+.footer-col a{display:block;font-size:12.5px;color:rgba(245,242,236,0.3);margin-bottom:8px;cursor:pointer;text-decoration:none;transition:color 0.2s;}
+.footer-col a:hover{color:var(--gold);}
+.footer-div{border:none;border-top:1px solid rgba(245,242,236,0.06);margin-bottom:18px;}
+.footer-bottom{display:flex;justify-content:space-between;}
+.footer-bottom p{font-size:11.5px;color:rgba(245,242,236,0.18);}
+.tok-powered{font-size:11px;color:rgba(245,242,236,0.18);}
+.tok-powered span{color:var(--gold);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.a{animation:fadeUp 0.55s ease forwards;opacity:0;}
+.a1{animation-delay:.05s;}.a2{animation-delay:.18s;}.a3{animation-delay:.3s;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="index.html">
+    <div class="nav-brand">IDIAZABAL<span>Inversiones & Bienes Raíces</span></div>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Comprar</a>
+    <a href="index.html">Alquilar</a>
+    <a href="tasacion.html">Vender / Tasar</a>
+    <a href="administracion.html">Administración</a>
+    <a href="#" style="color:var(--gold);">Nosotros</a>
+  </div>
+  <button class="nav-cta" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contacto</button>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow a a1">Quiénes somos · La Plata, Buenos Aires</div>
+    <h1 class="a a2">Más de 10 años<br>construyendo <em>confianza</em></h1>
+    <p class="a a3">Somos una inmobiliaria familiar con raíces en La Plata. Nacimos con la convicción de que comprar, vender o alquilar una propiedad tiene que ser una experiencia tranquila, transparente y profesional.</p>
+  </div>
+</div>
+
+
+<!-- ACCIONES RAPIDAS -->
+<div style="background:var(--nav-bg);padding:56px 4rem;border-bottom:3px solid rgba(201,145,46,0.3);">
+  <div style="max-width:1060px;margin:0 auto;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px;">¿En qué podemos ayudarte?</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:38px;color:#F5F2EC;font-weight:400;line-height:1.1;">¿Qué estás buscando hoy?</div>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:14px;">
+
+      <a href="index.html" style="text-decoration:none;">
+        <div class="accion-btn">
+          <div class="accion-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M3 9.5L12 3l9 6.5V21H3V9.5z"/><rect x="9" y="14" width="6" height="7" rx="1"/></svg>
+          </div>
+          <div class="accion-label">Quiero comprar</div>
+          <div class="accion-sub">Ver propiedades disponibles</div>
+          <div class="accion-arrow">Ver propiedades →</div>
+        </div>
+      </a>
+
+      <a href="index.html" style="text-decoration:none;">
+        <div class="accion-btn">
+          <div class="accion-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v6a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 21V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v16"/></svg>
+          </div>
+          <div class="accion-label">Quiero alquilar</div>
+          <div class="accion-sub">Ver alquileres disponibles</div>
+          <div class="accion-arrow">Ver alquileres →</div>
+        </div>
+      </a>
+
+      <a href="tasacion.html" style="text-decoration:none;">
+        <div class="accion-btn">
+          <div class="accion-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="accion-label">Vender o tasar</div>
+          <div class="accion-sub">Tasación gratuita online</div>
+          <div class="accion-arrow">Tasar mi propiedad →</div>
+        </div>
+      </a>
+
+      <a href="administracion.html" style="text-decoration:none;">
+        <div class="accion-btn accion-btn-gold">
+          <div class="accion-icon" style="background:rgba(26,26,26,0.2);">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#1E1E1C" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="6" width="18" height="14" rx="2"/><path d="M8 6V4h8v2"/><path d="M12 11v4M10 13h4"/></svg>
+          </div>
+          <div class="accion-label" style="color:var(--dark);">Administrar mi propiedad</div>
+          <div class="accion-sub" style="color:rgba(26,26,26,0.6);">Cobro garantizado todos los meses</div>
+          <div class="accion-arrow" style="color:var(--dark);opacity:0.7;">Saber más →</div>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</div>
+
+<style>
+.accion-btn{
+  background:rgba(255,255,255,0.06);
+  border:1px solid rgba(255,255,255,0.1);
+  padding:30px 24px;
+  cursor:pointer;
+  transition:all 0.25s;
+  display:flex;flex-direction:column;gap:8px;
+  height:100%;
+}
+.accion-btn:hover{
+  background:rgba(255,255,255,0.12);
+  border-color:var(--gold);
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(0,0,0,0.2);
+}
+.accion-btn-gold{
+  background:var(--gold);
+  border-color:var(--gold);
+}
+.accion-btn-gold:hover{
+  background:var(--gold-l);
+  border-color:var(--gold-l);
+  transform:translateY(-3px);
+  box-shadow:0 8px 32px rgba(201,145,46,0.3);
+}
+.accion-icon{
+  width:52px;height:52px;
+  background:rgba(201,145,46,0.12);
+  border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:8px;
+  flex-shrink:0;
+}
+.accion-label{
+  font-family:'Cormorant Garamond',serif;
+  font-size:21px;font-weight:500;color:#F5F2EC;
+  line-height:1.2;
+}
+.accion-sub{
+  font-size:12.5px;color:rgba(245,242,236,0.45);font-weight:300;line-height:1.5;
+  flex:1;
+}
+.accion-arrow{
+  font-size:11px;font-weight:700;letter-spacing:1px;
+  text-transform:uppercase;color:var(--gold);
+  margin-top:10px;
+}
+</style>
+
+
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-val">+500</div><div class="stat-label">Operaciones cerradas</div></div>
+    <div class="stat"><div class="stat-val">+200</div><div class="stat-label">Propiedades administradas</div></div>
+    <div class="stat"><div class="stat-val">10+</div><div class="stat-label">Años en el mercado</div></div>
+    <div class="stat"><div class="stat-val">98%</div><div class="stat-label">Clientes satisfechos</div></div>
+  </div>
+</div>
+
+<!-- HISTORIA -->
+<div class="historia-section">
+  <div class="historia-inner">
+    <div class="historia-left">
+      <div class="sec-label">Nuestra historia</div>
+      <div class="sec-title">De La Plata<br>para <em>La Plata</em></div>
+      <div class="historia-text">
+        <p>Idiazabal Inversiones & Bienes Raíces nació hace más de 10 años con una premisa simple: tratá a cada cliente como tratarías a un familiar que te pide consejo para tomar la decisión más importante de su vida.</p>
+        <p>Somos platenses. Conocemos cada barrio, cada calle y cada particularidad del mercado inmobiliario local. Eso nos da una ventaja que ninguna franquicia nacional puede replicar: el conocimiento profundo del territorio donde operamos.</p>
+        <p>A lo largo de los años crecimos sin perder el trato cercano que nos define. Hoy somos un equipo de profesionales especializados en compra, venta, alquiler y administración de propiedades residenciales, con tecnología de punta y la calidez de siempre.</p>
+      </div>
+    </div>
+    <div class="historia-right">
+      <div class="valores-grid">
+        <div class="valor">
+          <div class="valor-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h4>Transparencia</h4>
+          <p>Sin letra chica. Lo que acordamos es lo que hacemos.</p>
+        </div>
+        <div class="valor">
+          <div class="valor-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <h4>Respuesta rápida</h4>
+          <p>Respondemos en menos de 2 horas, siempre.</p>
+        </div>
+        <div class="valor">
+          <div class="valor-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <h4>Trato cercano</h4>
+          <p>No sos un expediente. Conocemos tu historia.</p>
+        </div>
+        <div class="valor">
+          <div class="valor-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h4>Resultados reales</h4>
+          <p>Más de 500 operaciones cerradas lo avalan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPO -->
+<div class="equipo-section">
+  <div class="sec-label">El equipo</div>
+  <div class="sec-title">Las personas detrás de cada operación</div>
+  <div class="equipo-grid">
+    <div class="miembro">
+      <div class="miembro-foto">
+        <div class="miembro-inicial">MI</div>
+      </div>
+      <div class="miembro-body">
+        <h3>Martín Idiazabal</h3>
+        <div class="miembro-cargo">Fundador & Director</div>
+        <div class="miembro-bio">Corredor inmobiliario con más de 10 años de trayectoria en La Plata. Especialista en propiedades residenciales y mercado de inversión.</div>
+        <div class="miembro-mat">Matrícula CUCICBA N° 0000</div>
+      </div>
+    </div>
+    <div class="miembro">
+      <div class="miembro-foto" style="background:linear-gradient(140deg,#3A3830,#4A4840);">
+        <div class="miembro-inicial">AG</div>
+      </div>
+      <div class="miembro-body">
+        <h3>Asesor / Asesora</h3>
+        <div class="miembro-cargo">Asesor Comercial</div>
+        <div class="miembro-bio">Especialista en compraventa residencial. Conocimiento profundo de los barrios de La Plata y su zona de influencia.</div>
+        <div class="miembro-mat">Matrícula CUCICBA N° 0000</div>
+      </div>
+    </div>
+    <div class="miembro">
+      <div class="miembro-foto" style="background:linear-gradient(140deg,#2A3038,#3A4048);">
+        <div class="miembro-inicial">AD</div>
+      </div>
+      <div class="miembro-body">
+        <h3>Asesor / Asesora</h3>
+        <div class="miembro-cargo">Administración de Alquileres</div>
+        <div class="miembro-bio">A cargo de la cartera de propiedades administradas. Garantiza que cada propietario reciba su rendición mensual en tiempo y forma.</div>
+        <div class="miembro-mat">Matrícula CUCICBA N° 0000</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MISIÓN VISIÓN VALORES -->
+<div class="mision-section">
+  <div class="sec-label" style="color:var(--gold);">Lo que nos guía</div>
+  <div class="sec-title" style="color:#F5F2EC;font-size:38px;">Propósito, visión y valores</div>
+  <div class="mision-inner">
+    <div class="mision-item">
+      <div class="mision-item-label">Misión</div>
+      <h3>Simplificar las decisiones <em>inmobiliarias</em></h3>
+      <p>Acompañar a cada persona en la operación inmobiliaria más importante de su vida, con información clara, trato humano y resultados concretos.</p>
+    </div>
+    <div class="mision-item">
+      <div class="mision-item-label">Visión</div>
+      <h3>Ser la inmobiliaria de <em>referencia</em> en La Plata</h3>
+      <p>Convertirnos en la primera elección de compradores, vendedores y propietarios en La Plata y Gran Buenos Aires, reconocidos por nuestra transparencia y profesionalismo.</p>
+    </div>
+    <div class="mision-item">
+      <div class="mision-item-label">Valores</div>
+      <h3>Confianza, <em>siempre</em></h3>
+      <p>Transparencia en cada operación. Respuesta rápida ante cualquier consulta. Compromiso con el resultado. Y el trato cercano que solo da quien conoce el barrio.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACTO -->
+<div class="contacto-section" id="contacto">
+  <div class="contacto-inner">
+    <div class="contacto-left">
+      <div class="sec-label">Contacto</div>
+      <h2>Estamos para <em>ayudarte</em></h2>
+      <p>Tenés una consulta, querés conocer una propiedad o simplemente querés saber más sobre nuestros servicios. Escribinos y te respondemos en menos de 2 horas.</p>
+      <div class="contacto-datos">
+        <div class="dato">
+          <div class="dato-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="dato-text">
+            <strong>Oficina</strong>
+            <span>Calle 00 N° 000 · La Plata, Buenos Aires</span>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="dato-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 014.07 9.81a19.79 19.79 0 01-3.07-8.67A2 2 0 013 .82h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="dato-text">
+            <strong>Teléfono / WhatsApp</strong>
+            <span>+54 9 221 000-0000</span>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="dato-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="dato-text">
+            <strong>E-mail</strong>
+            <span>info@idiazabal.com.ar</span>
+          </div>
+        </div>
+        <div class="dato">
+          <div class="dato-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="dato-text">
+            <strong>Horario de atención</strong>
+            <span>Lunes a viernes 9 a 18 hs · Sábados 9 a 13 hs</span>
+          </div>
+        </div>
+      </div>
+      <div class="mapa-box" style="margin-top:28px;">
+        <svg width="200" height="120" viewBox="0 0 200 120"><rect width="200" height="120" fill="#d4e8d4"/><rect x="0" y="55" width="200" height="2" fill="#b8d4b8"/><rect x="95" y="0" width="2" height="120" fill="#b8d4b8"/><rect x="30" y="0" width="1" height="120" fill="#c8d8c8"/><rect x="160" y="0" width="1" height="120" fill="#c8d8c8"/><rect x="0" y="25" width="200" height="1" fill="#c8d8c8"/><rect x="0" y="90" width="200" height="1" fill="#c8d8c8"/></svg>
+        <div class="mapa-pin" style="top:38%;left:48%;">
+          <svg width="24" height="32" viewBox="0 0 28 36"><path d="M14 0C6.27 0 0 6.27 0 14c0 9.75 14 22 14 22s14-12.25 14-22C28 6.27 21.73 0 14 0z" fill="#C9912E"/><circle cx="14" cy="14" r="5" fill="#fff"/></svg>
+        </div>
+        <div class="mapa-label">Idiazabal · La Plata</div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Envianos tu consulta</h3>
+      <p>Te respondemos en menos de 2 horas en horario de atención</p>
+      <div class="fg2">
+        <div class="field"><label>Nombre</label><input type="text" placeholder="Tu nombre completo"></div>
+        <div class="field"><label>Teléfono</label><input type="text" placeholder="+54 9 221..."></div>
+      </div>
+      <div class="field"><label>E-mail</label><input type="email" placeholder="tu@email.com"></div>
+      <div class="field">
+        <label>¿En qué podemos ayudarte?</label>
+        <select>
+          <option>Quiero comprar una propiedad</option>
+          <option>Quiero vender o tasar</option>
+          <option>Quiero alquilar</option>
+          <option>Quiero administrar mi propiedad</option>
+          <option>Otra consulta</option>
+        </select>
+      </div>
+      <div class="field"><label>Mensaje</label><textarea placeholder="Contanos tu consulta o situación..."></textarea></div>
+      <button class="form-submit" onclick="submitForm(this)">Enviar consulta →</button>
+      <button class="wa-btn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribir por WhatsApp
+      </button>
+      <div class="form-privacy">Tus datos son confidenciales. No los compartimos con terceros.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="footer-name">IDIAZABAL</div>
+      <div class="footer-sub">Inversiones & Bienes Raíces</div>
+      <p>Especialistas en propiedades residenciales en La Plata y Gran Buenos Aires.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a href="index.html">Comprar</a>
+      <a href="tasacion.html">Vender / Tasar</a>
+      <a href="administracion.html">Administración</a>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a href="#">Nosotros</a>
+      <a href="#contacto">Contacto</a>
+      <a>WhatsApp</a>
+      <a>Instagram</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a>Términos y condiciones</a>
+      <a>Política de privacidad</a>
+      <a>CUCICBA</a>
+    </div>
+  </div>
+  <hr class="footer-div">
+  <div class="footer-bottom">
+    <p>© 2026 Idiazabal Inversiones & Bienes Raíces · La Plata, Buenos Aires</p>
+    <div class="tok-powered">Gestionado con <span>Tokko Broker</span></div>
+  </div>
+</footer>
+
+<script>
+function submitForm(btn){
+  btn.textContent='✓ Consulta enviada — Te respondemos pronto';
+  btn.style.background='#22C55E';
+  btn.style.color='#fff';
+  btn.disabled=true;
+}
+</script>
+</body>
+</html>

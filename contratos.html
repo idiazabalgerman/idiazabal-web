@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Módulo de Contratos · Idiazabal</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9912E;--gold-l:#DFB25A;
+  --cream:#FAF8F3;--cream2:#F4F1EA;--white:#FFFFFF;
+  --stone:#4A4A48;--nav-bg:#5A5855;
+  --border:#E4E0D6;--light:#AEABA2;--mid:#6B6866;--dark:#1E1E1C;
+  --green:#22C55E;--green-bg:#F0FAF4;--green-border:#BBE8CC;
+  --yellow-bg:#FEF9C3;--yellow-border:#FDE68A;--yellow-text:#854D0E;
+  --red-bg:#FEE2E2;--red-border:#FECACA;--red-text:#991B1B;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito Sans',sans-serif;background:var(--cream);color:var(--dark);}
+
+/* NAV */
+nav{background:var(--nav-bg);padding:0 3rem;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:200;border-bottom:1px solid rgba(201,145,46,0.18);}
+.nav-brand{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:18px;font-weight:500;letter-spacing:1px;}
+.nav-brand span{display:block;font-size:8px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-family:'Nunito Sans',sans-serif;font-weight:600;}
+.nav-tabs{display:flex;gap:0;height:62px;}
+.ntab{padding:0 20px;display:flex;align-items:center;font-size:12px;font-weight:600;color:rgba(245,242,236,0.5);cursor:pointer;border-bottom:2px solid transparent;transition:all 0.2s;letter-spacing:0.3px;}
+.ntab.active{color:#F5F2EC;border-bottom-color:var(--gold);}
+.ntab:hover{color:rgba(245,242,236,0.8);}
+
+.view{display:none;}.view.active{display:block;}
+
+/* ===== PANEL INTERNO ===== */
+.panel-layout{display:grid;grid-template-columns:300px 1fr;min-height:calc(100vh - 62px);}
+.sidebar{background:var(--white);border-right:1px solid var(--border);}
+.sidebar-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sidebar-head h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;}
+.new-btn{background:var(--gold);color:var(--dark);border:none;padding:6px 12px;font-size:11px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;}
+.inmueble-item{padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background 0.15s;}
+.inmueble-item:hover{background:var(--cream);}
+.inmueble-item.sel{background:var(--cream2);border-left:3px solid var(--gold);}
+.inmueble-dir{font-size:13px;font-weight:600;color:var(--dark);margin-bottom:2px;}
+.inmueble-meta{font-size:11px;color:var(--light);}
+.badge{display:inline-block;font-size:9px;font-weight:700;padding:2px 7px;letter-spacing:0.5px;margin-top:5px;}
+.badge-green{background:var(--green-bg);color:#166534;border:1px solid var(--green-border);}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow-text);border:1px solid var(--yellow-border);}
+.badge-red{background:var(--red-bg);color:var(--red-text);border:1px solid var(--red-border);}
+.badge-blue{background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;}
+.badge-gray{background:var(--cream2);color:var(--light);border:1px solid var(--border);}
+
+/* MAIN PANEL */
+.main{padding:28px 32px;background:var(--cream);}
+.main-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:22px;}
+.main-title{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:500;}
+.main-sub{font-size:12px;color:var(--light);margin-top:3px;}
+.btn-row{display:flex;gap:8px;}
+.btn{padding:8px 16px;font-size:12px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-gold{background:var(--gold);color:var(--dark);}
+.btn-gold:hover{background:var(--gold-l);}
+.btn-stone{background:var(--stone);color:#F5F2EC;}
+.btn-stone:hover{background:var(--gold);color:var(--dark);}
+.btn-outline{background:transparent;color:var(--stone);border:1px solid var(--border);}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-sm{padding:5px 12px;font-size:11px;}
+
+/* FLUJO VISUAL */
+.flujo{display:flex;gap:0;margin-bottom:24px;background:var(--white);border:1px solid var(--border);}
+.flujo-step{flex:1;padding:14px 16px;border-right:1px solid var(--border);position:relative;}
+.flujo-step:last-child{border-right:none;}
+.flujo-step.done{background:var(--green-bg);}
+.flujo-step.active{background:#FEF9F0;border-bottom:2px solid var(--gold);}
+.flujo-step.pending{opacity:0.5;}
+.fs-num{font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);margin-bottom:4px;}
+.fs-num.done{color:var(--green);}
+.fs-num.active{color:var(--gold);}
+.fs-label{font-size:12.5px;font-weight:600;color:var(--dark);}
+.fs-sub{font-size:11px;color:var(--light);margin-top:2px;}
+
+/* INFO STRIP */
+.info-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+.icard{background:var(--white);border:1px solid var(--border);padding:14px 16px;}
+.icard-label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:5px;}
+.icard-val{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--dark);}
+.icard-sub{font-size:11px;color:var(--light);margin-top:2px;}
+
+/* SECCIONES */
+.sec{background:var(--white);border:1px solid var(--border);margin-bottom:14px;}
+.sec-head{padding:13px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.sec-head h4{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:500;}
+.sec-body{padding:14px 18px;}
+
+/* DOCS */
+.doc-row{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);}
+.doc-row:last-child{border-bottom:none;}
+.doc-left{display:flex;align-items:center;gap:10px;}
+.doc-icon{width:30px;height:30px;background:var(--cream2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.doc-name{font-size:12.5px;color:var(--dark);}
+.doc-meta{font-size:11px;color:var(--light);margin-top:1px;}
+
+/* APROBACION */
+.aprobacion-box{background:var(--nav-bg);border:none;padding:22px 24px;margin-bottom:14px;position:relative;}
+.aprobacion-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.aprobacion-inner{display:flex;align-items:center;justify-content:space-between;gap:20px;}
+.aprobacion-left h4{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:20px;font-weight:400;margin-bottom:6px;}
+.aprobacion-left p{font-size:12.5px;color:rgba(245,242,236,0.45);line-height:1.6;}
+.aprobacion-btns{display:flex;flex-direction:column;gap:8px;flex-shrink:0;}
+.btn-aprobar{padding:12px 24px;background:var(--green);color:#fff;border:none;font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;white-space:nowrap;transition:all 0.2s;}
+.btn-aprobar:hover{background:#16A34A;}
+.btn-editar{padding:10px 24px;background:transparent;color:rgba(245,242,236,0.55);border:1px solid rgba(245,242,236,0.2);font-size:12.5px;font-family:'Nunito Sans',sans-serif;cursor:pointer;white-space:nowrap;}
+.btn-editar:hover{border-color:var(--gold);color:var(--gold);}
+
+/* ENVIO CONFIRMADO */
+.envio-box{background:var(--green-bg);border:1px solid var(--green-border);padding:18px 20px;margin-bottom:14px;}
+.envio-inner{display:flex;align-items:center;gap:14px;}
+.envio-icon{width:36px;height:36px;background:var(--green);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.envio-text strong{font-size:13.5px;color:#166534;display:block;margin-bottom:2px;}
+.envio-text span{font-size:12px;color:#166534;opacity:0.7;}
+.envio-confirmacion{margin-top:12px;background:var(--white);border:1px solid var(--green-border);padding:12px 14px;display:flex;align-items:center;justify-content:space-between;}
+.conf-status{font-size:12.5px;color:var(--mid);}
+.conf-status strong{color:var(--dark);}
+
+/* CONTRATO BLOQUEADO */
+.contrato-bloqueado{background:var(--cream2);border:1px solid var(--border);padding:20px;text-align:center;}
+.candado{font-size:28px;margin-bottom:8px;}
+.contrato-bloqueado p{font-size:13px;color:var(--mid);line-height:1.6;}
+
+/* TIMELINE */
+.timeline{display:flex;flex-direction:column;gap:0;}
+.tl-item{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border);}
+.tl-item:last-child{border-bottom:none;}
+.tl-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:4px;}
+.tl-dot.green{background:var(--green);}
+.tl-dot.gold{background:var(--gold);}
+.tl-dot.gray{background:var(--border);}
+.tl-text{font-size:12.5px;color:var(--dark);}
+.tl-time{font-size:11px;color:var(--light);margin-top:2px;}
+
+/* ===== FORMULARIO INQUILINO ===== */
+.form-wrap{max-width:680px;margin:0 auto;}
+.form-hero-band{background:var(--nav-bg);padding:36px 3rem 32px;border-bottom:3px solid rgba(201,145,46,0.25);}
+.f-eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:10px;}
+.f-h1{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:30px;font-weight:400;margin-bottom:8px;}
+.f-desc{color:rgba(245,242,236,0.45);font-size:13px;font-weight:300;line-height:1.7;}
+.f-inmueble{background:rgba(201,145,46,0.12);border:1px solid rgba(201,145,46,0.28);color:var(--gold);font-size:12px;font-weight:700;padding:6px 14px;display:inline-block;margin-top:14px;}
+
+.steps-strip{background:var(--white);border-bottom:1px solid var(--border);padding:0 3rem;}
+.steps-strip-inner{display:flex;max-width:680px;margin:0 auto;}
+.fstep{flex:1;padding:13px 0;text-align:center;font-size:11.5px;font-weight:600;color:var(--light);border-bottom:2px solid transparent;transition:all 0.2s;}
+.fstep.done{color:var(--green);}
+.fstep.cur{color:var(--dark);border-bottom-color:var(--gold);}
+
+.fwrap{max-width:680px;margin:0 auto;padding:24px 3rem;}
+.fcard{background:var(--white);border:1px solid var(--border);margin-bottom:16px;}
+.fcard-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;}
+.fcard-num{width:26px;height:26px;border-radius:50%;background:var(--gold);color:var(--dark);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.fcard-head h3{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;}
+.fcard-head p{font-size:11.5px;color:var(--light);margin-top:1px;}
+.fcard-body{padding:20px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;}
+.fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px;}
+.field{display:flex;flex-direction:column;gap:4px;}
+.field label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;}
+.field input,.field select,.field textarea{padding:9px 12px;border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s;appearance:none;width:100%;}
+.field input:focus,.field select:focus{border-color:var(--gold);}
+.field textarea{resize:none;height:70px;}
+
+.upload-zone{border:2px dashed var(--border);background:var(--cream2);padding:20px;text-align:center;cursor:pointer;transition:all 0.2s;position:relative;margin-top:6px;}
+.upload-zone:hover{border-color:var(--gold);background:#FEF9F0;}
+.upload-zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-zone h5{font-size:12.5px;font-weight:600;color:var(--dark);margin:6px 0 3px;}
+.upload-zone p{font-size:11px;color:var(--light);}
+.upload-ok{display:none;background:var(--green-bg);border:1px solid var(--green-border);padding:8px 12px;margin-top:6px;font-size:12px;color:#166534;align-items:center;gap:6px;}
+
+.garante-block{background:var(--cream2);border:1px solid var(--border);padding:16px;margin-top:12px;position:relative;}
+.garante-block h4{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:12px;}
+.rm-btn{position:absolute;top:12px;right:12px;background:none;border:none;color:var(--light);font-size:14px;cursor:pointer;}
+.add-btn{width:100%;padding:10px;background:transparent;border:1px dashed var(--border);color:var(--mid);font-size:12.5px;font-family:'Nunito Sans',sans-serif;cursor:pointer;transition:all 0.2s;margin-top:12px;}
+.add-btn:hover{border-color:var(--gold);color:var(--gold);}
+
+.nota-box{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--gold);padding:12px 14px;font-size:12px;color:var(--mid);line-height:1.6;margin-top:4px;}
+.nota-box strong{color:var(--dark);}
+
+.submit-btn{width:100%;padding:14px;background:var(--stone);color:#F5F2EC;border:none;font-size:14px;font-weight:700;font-family:'Nunito Sans',sans-serif;letter-spacing:0.5px;cursor:pointer;transition:background 0.2s;}
+.submit-btn:hover{background:var(--gold);color:var(--dark);}
+.privacy-note{font-size:11px;color:var(--light);text-align:center;margin-top:10px;line-height:1.5;}
+
+/* SUCCESS INQUILINO */
+.success-box{background:var(--white);border:1px solid var(--border);padding:48px 32px;text-align:center;margin:24px 0;}
+.success-icon{width:60px;height:60px;background:var(--green-bg);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+.success-box h2{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:10px;}
+.success-box p{font-size:13.5px;color:var(--mid);line-height:1.75;max-width:420px;margin:0 auto 20px;}
+.success-steps{display:flex;flex-direction:column;gap:10px;max-width:380px;margin:0 auto;text-align:left;}
+.success-step{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mid);}
+.success-step-num{width:22px;height:22px;border-radius:50%;background:var(--gold);color:var(--dark);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+
+/* CONFIRMACION INQUILINO */
+.confirm-view{max-width:560px;margin:60px auto;padding:0 2rem;}
+.confirm-card{background:var(--white);border:1px solid var(--border);overflow:hidden;}
+.confirm-card-head{background:var(--nav-bg);padding:28px;position:relative;}
+.confirm-card-head::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);}
+.confirm-card-head h2{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:26px;font-weight:400;margin-bottom:6px;}
+.confirm-card-head p{font-size:12.5px;color:rgba(245,242,236,0.45);}
+.confirm-card-body{padding:28px;}
+.confirm-data{background:var(--cream2);border:1px solid var(--border);padding:16px;margin-bottom:20px;}
+.confirm-data-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:13px;}
+.confirm-data-row:last-child{border-bottom:none;}
+.confirm-data-label{color:var(--light);}
+.confirm-data-val{color:var(--dark);font-weight:600;}
+.confirm-nota{font-size:13px;color:var(--mid);line-height:1.7;margin-bottom:20px;}
+.confirm-btn{width:100%;padding:14px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;transition:background 0.2s;margin-bottom:10px;}
+.confirm-btn:hover{background:#16A34A;}
+.confirm-btn-s{width:100%;padding:11px;background:transparent;color:var(--mid);border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;cursor:pointer;}
+.confirm-done{display:none;background:var(--green-bg);border:1px solid var(--green-border);padding:18px;text-align:center;margin-top:14px;}
+.confirm-done strong{color:#166534;font-size:14px;}
+.confirm-done p{font-size:12.5px;color:#166534;margin-top:4px;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" style="text-decoration:none;">
+    <div class="nav-brand">IDIAZABAL<span>Inversiones & Bienes Raíces</span></div>
+  </a>
+  <div class="nav-tabs">
+    <div class="ntab active" onclick="switchView('panel',this)">📁 Panel interno</div>
+    <div class="ntab" onclick="switchView('formulario',this)">📋 Formulario inquilino</div>
+    <div class="ntab" onclick="switchView('propietario',this)">🏠 Vista propietario</div>
+    <div class="ntab" onclick="switchView('confirmacion',this)">✅ Confirmación inquilino</div>
+  </div>
+</nav>
+
+<!-- ===== PANEL INTERNO ===== -->
+<div class="view active" id="view-panel">
+  <div class="panel-layout">
+    <div class="sidebar">
+      <div class="sidebar-head">
+        <h3>Carpetas de inmuebles</h3>
+        <button class="new-btn">+ Nueva</button>
+      </div>
+      <div class="inmueble-item sel" onclick="selectInm(this,0)">
+        <div class="inmueble-dir">Calle 7 Nº 31 · P3 Dpto A</div>
+        <div class="inmueble-meta">La Plata · Depto · Piccinelli</div>
+        <span class="badge badge-yellow">⚠ Pendiente aprobación</span>
+      </div>
+      <div class="inmueble-item" onclick="selectInm(this,1)">
+        <div class="inmueble-dir">San Sebastián 540</div>
+        <div class="inmueble-meta">City Bell · Casa · García</div>
+        <span class="badge badge-blue">📨 Docs cargados</span>
+      </div>
+      <div class="inmueble-item" onclick="selectInm(this,2)">
+        <div class="inmueble-dir">Calle 33 Nº 780</div>
+        <div class="inmueble-meta">La Plata · Depto · López</div>
+        <span class="badge badge-green">✓ Contrato enviado</span>
+      </div>
+      <div class="inmueble-item" onclick="selectInm(this,3)">
+        <div class="inmueble-dir">Calle 50 Nº 1234</div>
+        <div class="inmueble-meta">Zona Norte · Casa · Martínez</div>
+        <span class="badge badge-gray">Link enviado</span>
+      </div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main">
+
+      <!-- HEADER -->
+      <div class="main-header">
+        <div>
+          <div class="main-title">Calle 7 Nº 31 · Piso 3 Dpto A</div>
+          <div class="main-sub">La Plata · Propietaria: Laura Piccinelli · Inquilino: Mary Delgado</div>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline btn-sm" onclick="copyLink()">📋 Copiar link</button>
+          <button class="btn btn-outline btn-sm">💬 WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- FLUJO -->
+      <div class="flujo" style="display:grid;grid-template-columns:repeat(8,1fr);">
+        <div class="flujo-step done">
+          <div class="fs-num done">✓ 1</div>
+          <div class="fs-label">Link enviado</div>
+          <div class="fs-sub">14/04/2026</div>
+        </div>
+        <div class="flujo-step done">
+          <div class="fs-num done">✓ 2</div>
+          <div class="fs-label">Docs cargados</div>
+          <div class="fs-sub">16/04/2026</div>
+        </div>
+        <div class="flujo-step done">
+          <div class="fs-num done">✓ 3</div>
+          <div class="fs-label">Borrador IA</div>
+          <div class="fs-sub">17/04/2026</div>
+        </div>
+        <div class="flujo-step active" id="fstep4">
+          <div class="fs-num active" id="fnum4">● 4</div>
+          <div class="fs-label">Revisión Idiazabal</div>
+          <div class="fs-sub">Pendiente — vos</div>
+        </div>
+        <div class="flujo-step pending" id="fstep5">
+          <div class="fs-num" id="fnum5">5</div>
+          <div class="fs-label">Aprobación propietario</div>
+          <div class="fs-sub">Laura Piccinelli</div>
+        </div>
+        <div class="flujo-step pending" id="fstep6">
+          <div class="fs-num" id="fnum6">6</div>
+          <div class="fs-label">Envío al inquilino</div>
+          <div class="fs-sub">Mail + WhatsApp</div>
+        </div>
+        <div class="flujo-step pending" id="fstep7">
+          <div class="fs-num" id="fnum7">7</div>
+          <div class="fs-label">Confirmación recepción</div>
+          <div class="fs-sub">Inquilino</div>
+        </div>
+        <div class="flujo-step pending" id="fstep8">
+          <div class="fs-num" id="fnum8">8</div>
+          <div class="fs-label">Firma presencial</div>
+          <div class="fs-sub">A coordinar</div>
+        </div>
+      </div>
+
+      <!-- INFO -->
+      <div class="info-strip">
+        <div class="icard"><div class="icard-label">Inquilino</div><div class="icard-val" style="font-size:15px;">Mary Delgado</div><div class="icard-sub">DNI 19.077.484</div></div>
+        <div class="icard"><div class="icard-label">Inicio de locación</div><div class="icard-val">01/05/2026</div><div class="icard-sub">24 meses · Vence 04/2028</div></div>
+        <div class="icard"><div class="icard-label">Monto inicial</div><div class="icard-val">$250.000</div><div class="icard-sub">Actualiz. trimestral ICL</div></div>
+        <div class="icard"><div class="icard-label">Documentación</div><div class="icard-val" style="color:var(--yellow-text);font-size:16px;">3 / 4</div><div class="icard-sub">Falta 1 recibo de garante</div></div>
+      </div>
+
+      <!-- DOCUMENTACION -->
+      <div class="sec">
+        <div class="sec-head">
+          <h4>Documentación recibida</h4>
+          <span class="badge badge-yellow">1 pendiente</span>
+        </div>
+        <div class="sec-body">
+          <div class="doc-row">
+            <div class="doc-left">
+              <div class="doc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="doc-name">DNI — Mary Delgado</div><div class="doc-meta">15/04 · PDF · 1.2 MB</div></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="badge badge-green">✓</span><button class="btn btn-outline btn-sm">Ver</button></div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-left">
+              <div class="doc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="doc-name">Recibo de sueldo — Mary Delgado</div><div class="doc-meta">15/04 · PDF · 0.8 MB</div></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="badge badge-green">✓</span><button class="btn btn-outline btn-sm">Ver</button></div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-left">
+              <div class="doc-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="doc-name">DNI — Garante Yamila Marino</div><div class="doc-meta">16/04 · PDF · 1.1 MB</div></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="badge badge-green">✓</span><button class="btn btn-outline btn-sm">Ver</button></div>
+          </div>
+          <div class="doc-row">
+            <div class="doc-left">
+              <div class="doc-icon" style="border-style:dashed;opacity:0.5;"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#AEABA2" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+              <div><div class="doc-name" style="color:var(--light);">Recibo de sueldo — Garante Yamila Marino</div><div class="doc-meta">Pendiente de carga</div></div>
+            </div>
+            <div style="display:flex;gap:6px;align-items:center;"><span class="badge badge-red">✗ Falta</span><button class="btn btn-outline btn-sm">Recordar</button></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BORRADOR - SOLO INTERNO -->
+      <div class="sec">
+        <div class="sec-head">
+          <h4>Borrador del contrato <span style="font-size:11px;color:var(--light);font-family:'Nunito Sans',sans-serif;font-weight:400;">— Solo visible internamente</span></h4>
+          <div style="display:flex;gap:8px;">
+            <span class="badge badge-yellow">Pendiente aprobación</span>
+            <button class="btn btn-outline btn-sm">👁 Ver borrador</button>
+            <button class="btn btn-outline btn-sm">✏️ Editar</button>
+          </div>
+        </div>
+        <div class="sec-body">
+          <div class="contrato-bloqueado">
+            <div class="candado">🔒</div>
+            <p><strong style="color:var(--dark);">Contrato generado por IA · Pendiente de revisión</strong><br>
+            El borrador está listo. Revisalo y aprobalo para que se envíe automáticamente al inquilino por mail y WhatsApp.</p>
+            <div style="display:flex;gap:8px;justify-content:center;margin-top:14px;">
+              <button class="btn btn-outline btn-sm">Ver PDF borrador</button>
+              <button class="btn btn-outline btn-sm">Descargar DOCX</button>
+            </div>
+          </div>
+          <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);padding:10px 14px;margin-top:12px;font-size:12px;color:var(--yellow-text);">
+            ⚠️ Falta el recibo de sueldo del garante Yamila Marino. Podés aprobar igual o esperar a que lo cargue.
+          </div>
+        </div>
+      </div>
+
+      <!-- APROBACION -->
+      <div class="aprobacion-box" id="aprobacion-box">
+        <div class="aprobacion-inner">
+          <div class="aprobacion-left">
+            <h4>¿Aprobás el borrador internamente?</h4>
+            <p>Una vez que lo aprobés, se envía el borrador al <strong style="color:rgba(245,242,236,0.7);">propietario (Laura Piccinelli)</strong> para su revisión y aprobación. Recién después de que el propietario apruebe, se envía al inquilino.</p>
+          </div>
+          <div class="aprobacion-btns">
+            <button class="btn-aprobar" onclick="aprobarContrato()">✓ Aprobar y enviar al propietario</button>
+            <button class="btn-editar">✏️ Editar primero</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- APROBACION PROPIETARIO - aparece tras aprobar internamente -->
+      <div id="prop-box" style="display:none;background:var(--white);border:1px solid var(--border);padding:0;margin-bottom:14px;overflow:hidden;">
+        <div style="background:#FEF9F0;border-bottom:1px solid var(--yellow-border);padding:14px 18px;display:flex;align-items:center;gap:10px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          <div style="font-size:12.5px;color:var(--yellow-text);font-weight:600;">Esperando aprobación del propietario</div>
+        </div>
+        <div style="padding:18px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+            <div>
+              <div style="font-size:13.5px;font-weight:700;color:var(--dark);margin-bottom:3px;">Laura Piccinelli — Propietaria</div>
+              <div style="font-size:12px;color:var(--light);">Mail enviado: piccinelli.laura@mail.com · WhatsApp: +54 9 221 111-1111</div>
+              <div style="font-size:12px;color:var(--light);margin-top:2px;">Enviado hoy a las 15:42 hs · Link válido 48 horas</div>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-outline btn-sm">Reenviar</button>
+              <button class="btn btn-gold btn-sm" onclick="propietarioAproba()">Simular aprobación propietario ↗</button>
+            </div>
+          </div>
+          <div style="margin-top:14px;background:var(--cream2);border:1px solid var(--border);padding:10px 14px;font-size:12px;color:var(--mid);">
+            El propietario recibe un link con el borrador del contrato y un botón para aprobarlo. Una vez que lo apruebe, el sistema envía el contrato al inquilino automáticamente.
+          </div>
+        </div>
+      </div>
+
+      <!-- ENVIO CONFIRMADO (oculto hasta aprobar) -->
+      <div class="envio-box" id="envio-box" style="display:none;">
+        <div class="envio-inner">
+          <div class="envio-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg></div>
+          <div class="envio-text">
+            <strong>Propietario y Idiazabal aprobaron — Contrato enviado al inquilino</strong>
+            <span>Mail enviado a mary.delgado@mail.com · WhatsApp enviado a +54 9 221 000-0000</span>
+          </div>
+        </div>
+        <div class="envio-confirmacion" style="margin-top:14px;">
+          <div class="conf-status">
+            <strong>Confirmación de recepción:</strong>
+            <span id="conf-estado"> ⏳ Esperando que el inquilino confirme...</span>
+          </div>
+          <button class="btn btn-outline btn-sm" onclick="simularConfirmacion()">Simular confirmación ↗</button>
+        </div>
+      </div>
+
+      <!-- TIMELINE -->
+      <div class="sec">
+        <div class="sec-head"><h4>Historial de actividad</h4></div>
+        <div class="sec-body">
+          <div class="timeline">
+            <div class="tl-item"><div class="tl-dot green"></div><div><div class="tl-text">IA generó el borrador del contrato automáticamente</div><div class="tl-time">17/04/2026 · 14:32 hs</div></div></div>
+            <div class="tl-item"><div class="tl-dot green"></div><div><div class="tl-text">Yamila Marino cargó su DNI</div><div class="tl-time">16/04/2026 · 10:15 hs</div></div></div>
+            <div class="tl-item"><div class="tl-dot green"></div><div><div class="tl-text">Mary Delgado cargó DNI y recibo de sueldo</div><div class="tl-time">15/04/2026 · 18:47 hs</div></div></div>
+            <div class="tl-item"><div class="tl-dot gold"></div><div><div class="tl-text">Link de documentación enviado al inquilino</div><div class="tl-time">14/04/2026 · 09:00 hs</div></div></div>
+            <div class="tl-item"><div class="tl-dot gold"></div><div><div class="tl-text">Carpeta creada para Calle 7 Nº 31 Piso 3 Dpto A</div><div class="tl-time">13/04/2026 · 11:20 hs</div></div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORMULARIO INQUILINO ===== -->
+<div class="view" id="view-formulario">
+  <div class="form-hero-band">
+    <div style="max-width:680px;margin:0 auto;">
+      <div class="f-eyebrow">Documentación para contrato de alquiler</div>
+      <div class="f-h1">Cargá tus datos y documentos</div>
+      <div class="f-desc">Completá el formulario y subí tu documentación de forma segura. Toda la información es confidencial y será usada únicamente para la redacción del contrato.</div>
+      <div class="f-inmueble">📍 Inmueble: Calle 7 Nº 31 Piso 3 Dpto A · La Plata</div>
+    </div>
+  </div>
+
+  <div class="steps-strip">
+    <div class="steps-strip-inner">
+      <div class="fstep cur" id="fs1">1 · Tus datos</div>
+      <div class="fstep" id="fs2">2 · Documentos</div>
+      <div class="fstep" id="fs3">3 · Garantes</div>
+      <div class="fstep" id="fs4">4 · Listo</div>
+    </div>
+  </div>
+
+  <div class="fwrap">
+    <div id="form-content">
+      <div class="fcard">
+        <div class="fcard-head"><div class="fcard-num">1</div><div><h3>Tus datos personales</h3><p>Datos del/la locatario/a principal</p></div></div>
+        <div class="fcard-body">
+          <div class="fg2"><div class="field"><label>Nombre completo</label><input type="text" placeholder="Nombre y apellido completo"></div><div class="field"><label>DNI</label><input type="text" placeholder="Ej: 19.077.484"></div></div>
+          <div class="fg2"><div class="field"><label>CUIL / CUIT</label><input type="text" placeholder="Ej: 27-19077484-4"></div><div class="field"><label>Teléfono / WhatsApp</label><input type="text" placeholder="+54 9 221..."></div></div>
+          <div class="fg2"><div class="field"><label>E-mail</label><input type="email" placeholder="tu@email.com"></div><div class="field"><label>Estado civil</label><select><option>Soltero/a</option><option>Casado/a</option><option>Divorciado/a</option><option>Viudo/a</option></select></div></div>
+          <div class="field" style="margin-bottom:12px;"><label>Domicilio actual</label><input type="text" placeholder="Calle, número, piso, depto, ciudad"></div>
+          <div class="fg2"><div class="field"><label>Empleador / Empresa</label><input type="text" placeholder="Nombre de la empresa u organismo"></div><div class="field"><label>Legajo / N° empleado</label><input type="text" placeholder="Ej: 678432"></div></div>
+        </div>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-head"><div class="fcard-num">2</div><div><h3>Tu documentación</h3><p>DNI y recibo de sueldo — o garantía propietaria</p></div></div>
+        <div class="fcard-body">
+          <div style="margin-bottom:16px;">
+            <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px;">DNI (frente y dorso)</div>
+            <div class="upload-zone" onclick="fakeUp('up-dni')"><input type="file" accept=".pdf,image/*">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#AEABA2" stroke-width="1.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h5>Subir DNI</h5><p>PDF o imagen · Máx 10 MB</p>
+            </div>
+            <div class="upload-ok" id="up-dni"><span>✓</span> DNI cargado correctamente</div>
+          </div>
+          <div>
+            <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px;">Último recibo de sueldo</div>
+            <div class="upload-zone" onclick="fakeUp('up-rec')"><input type="file" accept=".pdf,image/*">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#AEABA2" stroke-width="1.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h5>Subir recibo de sueldo</h5><p>PDF · Máx 10 MB</p>
+            </div>
+            <div class="upload-ok" id="up-rec"><span>✓</span> Recibo de sueldo cargado correctamente</div>
+          </div>
+          <div class="nota-box" style="margin-top:14px;"><strong>¿Tenés garantía propietaria?</strong><br>Subí el título de propiedad y el último impuesto inmobiliario en lugar del recibo de sueldo.</div>
+        </div>
+      </div>
+
+      <div class="fcard">
+        <div class="fcard-head"><div class="fcard-num">3</div><div><h3>Garantes</h3><p>Datos y documentación de cada garante</p></div></div>
+        <div class="fcard-body">
+          <div class="garante-block">
+            <h4>Garante 1</h4>
+            <div class="fg2"><div class="field"><label>Nombre completo</label><input type="text" placeholder="Nombre y apellido"></div><div class="field"><label>DNI</label><input type="text" placeholder="DNI"></div></div>
+            <div class="fg2" style="margin-top:12px;"><div class="field"><label>CUIL / CUIT</label><input type="text" placeholder="CUIL/CUIT"></div><div class="field"><label>Domicilio</label><input type="text" placeholder="Domicilio completo"></div></div>
+            <div class="fg2" style="margin-top:12px;margin-bottom:12px;"><div class="field"><label>Empleador</label><input type="text" placeholder="Empresa u organismo"></div><div class="field"><label>Legajo</label><input type="text" placeholder="N° legajo"></div></div>
+            <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:6px;">DNI y recibo del garante</div>
+            <div class="upload-zone" onclick="fakeUp('g1-up')"><input type="file" accept=".pdf,image/*">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#AEABA2" stroke-width="1.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <h5>Subir documentación del garante</h5><p>PDF o imagen</p>
+            </div>
+            <div class="upload-ok" id="g1-up"><span>✓</span> Documentación del garante cargada</div>
+          </div>
+          <button class="add-btn" onclick="addGarante()">+ Agregar otro garante</button>
+          <div id="garantes-extra"></div>
+        </div>
+      </div>
+
+      <button class="submit-btn" onclick="enviarForm()">Enviar documentación →</button>
+      <div class="privacy-note">Tu información es confidencial. Solo será usada para la redacción del contrato de locación.<br>Idiazabal Inversiones & Bienes Raíces · La Plata.</div>
+    </div>
+
+    <!-- SUCCESS -->
+    <div id="form-success" style="display:none;">
+      <div class="success-box">
+        <div class="success-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#22C55E" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg></div>
+        <h2>¡Documentación enviada!</h2>
+        <p>Tu documentación fue recibida correctamente. El equipo de Idiazabal la revisará y te enviará el contrato en las próximas 24 horas por mail y WhatsApp.</p>
+        <div class="success-steps">
+          <div class="success-step"><div class="success-step-num">1</div>Idiazabal revisa tu documentación</div>
+          <div class="success-step"><div class="success-step-num">2</div>Se genera el contrato automáticamente</div>
+          <div class="success-step"><div class="success-step-num" style="background:var(--stone);">3</div>Idiazabal aprueba y te envía el contrato</div>
+          <div class="success-step"><div class="success-step-num" style="background:var(--stone);">4</div>Confirmás recepción desde el link</div>
+          <div class="success-step"><div class="success-step-num" style="background:var(--stone);">5</div>Coordinan fecha para firma presencial</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== VISTA PROPIETARIO ===== -->
+<div class="view" id="view-propietario">
+  <div style="max-width:640px;margin:52px auto;padding:0 2rem;">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;">Idiazabal Inversiones & Bienes Raíces</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--dark);font-weight:400;">Revisión del contrato</div>
+      <div style="font-size:13px;color:var(--mid);margin-top:8px;">Como propietario/a, te pedimos que revises el borrador del contrato antes de que se envíe al inquilino.</div>
+    </div>
+
+    <div style="background:var(--white);border:1px solid var(--border);overflow:hidden;margin-bottom:16px;">
+      <div style="background:var(--nav-bg);padding:20px 24px;position:relative;">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold);"></div>
+        <div style="font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:20px;font-weight:400;margin-bottom:4px;">Hola, Laura</div>
+        <div style="font-size:12.5px;color:rgba(245,242,236,0.45);">El contrato de locación de tu propiedad en Calle 7 Nº 31 Piso 3 Dpto A está listo para tu revisión.</div>
+      </div>
+      <div style="padding:22px 24px;">
+        <div style="background:var(--cream2);border:1px solid var(--border);padding:14px 16px;margin-bottom:18px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Inmueble</div><div style="font-size:13px;font-weight:600;color:var(--dark);">Calle 7 Nº 31 P3 Dpto A</div></div>
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Inquilino/a</div><div style="font-size:13px;font-weight:600;color:var(--dark);">Mary Saida Delgado Adriana</div></div>
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Inicio</div><div style="font-size:13px;font-weight:600;color:var(--dark);">1 de Mayo 2026</div></div>
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Duración</div><div style="font-size:13px;font-weight:600;color:var(--dark);">24 meses · Vence Abril 2028</div></div>
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Monto inicial</div><div style="font-size:13px;font-weight:600;color:var(--dark);">$250.000 / mes</div></div>
+            <div><div style="font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;margin-bottom:4px;">Depósito / Pagaré</div><div style="font-size:13px;font-weight:600;color:var(--dark);">$750.000</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:10px;margin-bottom:16px;">
+          <button class="btn btn-outline" style="flex:1;padding:10px;">👁 Ver borrador completo (PDF)</button>
+          <button class="btn btn-outline" style="flex:1;padding:10px;">⬇️ Descargar DOCX</button>
+        </div>
+
+        <div style="background:var(--yellow-bg);border:1px solid var(--yellow-border);padding:12px 14px;font-size:12px;color:var(--yellow-text);margin-bottom:18px;">
+          ⚠️ Revisá el borrador antes de aprobar. Una vez que lo aprobés, se envía automáticamente al inquilino.
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:8px;">¿Tenés algún comentario para Idiazabal?</div>
+          <textarea style="width:100%;padding:10px 12px;border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--dark);background:var(--cream);resize:none;height:80px;outline:none;" placeholder="Ej: Cambiar el monto del depósito, revisar cláusula de rescisión..."></textarea>
+        </div>
+
+        <button onclick="propApproveView()" style="width:100%;padding:14px;background:var(--green);color:#fff;border:none;font-size:14px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;margin-bottom:10px;transition:background 0.2s;" onmouseover="this.style.background='#16A34A'" onmouseout="this.style.background='var(--green)'">✓ Apruebo el contrato</button>
+        <button style="width:100%;padding:11px;background:transparent;color:var(--mid);border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;cursor:pointer;">✏️ Solicitar modificaciones a Idiazabal</button>
+
+        <div id="prop-approve-done" style="display:none;background:var(--green-bg);border:1px solid var(--green-border);padding:18px;text-align:center;margin-top:14px;">
+          <div style="font-size:22px;margin-bottom:8px;">✓</div>
+          <strong style="color:#166534;font-size:14px;">¡Gracias, Laura! Aprobación registrada.</strong>
+          <p style="font-size:12.5px;color:#166534;margin-top:6px;line-height:1.6;">Idiazabal fue notificado. El contrato se enviará al inquilino en los próximos minutos por mail y WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;font-size:12px;color:var(--light);">Idiazabal Inversiones & Bienes Raíces · La Plata · <a href="nosotros.html" style="color:var(--gold);">Contacto</a></div>
+  </div>
+</div>
+
+<!-- ===== CONFIRMACION INQUILINO ===== -->
+<div class="view" id="view-confirmacion">
+  <div class="confirm-view">
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:8px;">Idiazabal Inversiones & Bienes Raíces</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--dark);font-weight:400;">Tu contrato está listo</div>
+    </div>
+    <div class="confirm-card">
+      <div class="confirm-card-head">
+        <h2>Confirmá la recepción del contrato</h2>
+        <p>Revisá los datos y confirmá que recibiste el contrato de locación</p>
+      </div>
+      <div class="confirm-card-body">
+        <div class="confirm-data">
+          <div class="confirm-data-row"><span class="confirm-data-label">Inmueble</span><span class="confirm-data-val">Calle 7 Nº 31 P3 Dpto A · La Plata</span></div>
+          <div class="confirm-data-row"><span class="confirm-data-label">Locatario/a</span><span class="confirm-data-val">Mary Saida Delgado Adriana</span></div>
+          <div class="confirm-data-row"><span class="confirm-data-label">Inicio de locación</span><span class="confirm-data-val">1 de Mayo de 2026</span></div>
+          <div class="confirm-data-row"><span class="confirm-data-label">Duración</span><span class="confirm-data-val">24 meses · Vence Abril 2028</span></div>
+          <div class="confirm-data-row"><span class="confirm-data-label">Monto inicial</span><span class="confirm-data-val">$250.000 / mes</span></div>
+          <div class="confirm-data-row"><span class="confirm-data-label">Inmobiliaria</span><span class="confirm-data-val">Idiazabal Inversiones & Bienes Raíces</span></div>
+        </div>
+        <div class="confirm-nota">
+          Al confirmar la recepción estás indicando que recibiste el contrato, lo leíste y acordás con su contenido. La firma se realizará de forma presencial en las oficinas de Idiazabal o en el inmueble, según se acuerde.
+        </div>
+        <button class="confirm-btn" onclick="confirmarRecepcion()">✓ Confirmo que recibí y leí el contrato</button>
+        <button class="confirm-btn-s">📩 Reenviar contrato por mail</button>
+        <div class="confirm-done" id="confirm-done">
+          <strong>✓ Recepción confirmada</strong>
+          <p>Idiazabal fue notificado. Te contactarán para coordinar la fecha de firma presencial.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchView(id,el){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  if(el)el.classList.add('active');
+}
+function selectInm(el,idx){
+  document.querySelectorAll('.inmueble-item').forEach(i=>i.classList.remove('sel'));
+  el.classList.add('sel');
+}
+function copyLink(){
+  const m=document.createElement('div');
+  m.textContent='✓ Link copiado';
+  m.style.cssText='position:fixed;bottom:24px;right:24px;background:#1E1E1C;color:#fff;padding:12px 20px;font-size:13px;font-family:Nunito Sans,sans-serif;z-index:999;border-left:3px solid #C9912E;';
+  document.body.appendChild(m);setTimeout(()=>m.remove(),2500);
+}
+function fakeUp(id){
+  setTimeout(()=>{const el=document.getElementById(id);if(el)el.style.display='flex';},700);
+}
+let gc=1;
+function addGarante(){
+  gc++;
+  const d=document.createElement('div');
+  d.className='garante-block';d.style.marginTop='12px';
+  d.innerHTML=`<h4>Garante ${gc}</h4><button class="rm-btn" onclick="this.parentElement.remove()">✕</button>
+  <div class="fg2"><div class="field"><label>Nombre completo</label><input type="text" placeholder="Nombre y apellido"></div><div class="field"><label>DNI</label><input type="text" placeholder="DNI"></div></div>
+  <div class="fg2" style="margin-top:12px;"><div class="field"><label>CUIL / CUIT</label><input type="text" placeholder="CUIL/CUIT"></div><div class="field"><label>Domicilio</label><input type="text" placeholder="Domicilio completo"></div></div>
+  <div class="fg2" style="margin-top:12px;margin-bottom:12px;"><div class="field"><label>Empleador</label><input type="text" placeholder="Empresa u organismo"></div><div class="field"><label>Legajo</label><input type="text" placeholder="N° legajo"></div></div>
+  <div class="upload-zone" style="margin-top:6px;" onclick="fakeUp('g${gc}-up')"><input type="file" accept=".pdf,image/*"><h5 style="font-size:12px;margin:4px 0;">Subir documentación del garante</h5><p>PDF o imagen</p></div>
+  <div class="upload-ok" id="g${gc}-up"><span>✓</span> Documentación del garante cargada</div>`;
+  document.getElementById('garantes-extra').appendChild(d);
+}
+function enviarForm(){
+  document.getElementById('form-content').style.display='none';
+  document.getElementById('form-success').style.display='block';
+  document.getElementById('form-success').scrollIntoView({behavior:'smooth'});
+  document.getElementById('fs1').className='fstep done';
+  document.getElementById('fs2').className='fstep done';
+  document.getElementById('fs3').className='fstep done';
+  document.getElementById('fs4').className='fstep cur';
+}
+function aprobarContrato(){
+  document.getElementById('aprobacion-box').style.display='none';
+  document.getElementById('prop-box').style.display='block';
+  document.getElementById('prop-box').scrollIntoView({behavior:'smooth'});
+  // Paso 4 done, paso 5 activo
+  document.getElementById('fstep4').className='flujo-step done';
+  document.getElementById('fnum4').className='fs-num done';
+  document.getElementById('fnum4').textContent='✓ 4';
+  document.getElementById('fstep5').className='flujo-step active';
+  document.getElementById('fnum5').className='fs-num active';
+  document.getElementById('fnum5').textContent='● 5';
+}
+function propietarioAproba(){
+  document.getElementById('prop-box').style.display='none';
+  document.getElementById('envio-box').style.display='block';
+  document.getElementById('envio-box').scrollIntoView({behavior:'smooth'});
+  // Paso 5 done, paso 6 done, paso 7 activo
+  document.getElementById('fstep5').className='flujo-step done';
+  document.getElementById('fnum5').className='fs-num done';
+  document.getElementById('fnum5').textContent='✓ 5';
+  document.getElementById('fstep6').className='flujo-step done';
+  document.getElementById('fnum6').className='fs-num done';
+  document.getElementById('fnum6').textContent='✓ 6';
+  document.getElementById('fstep7').className='flujo-step active';
+  document.getElementById('fnum7').className='fs-num active';
+  document.getElementById('fnum7').textContent='● 7';
+}
+function simularConfirmacion(){
+  document.getElementById('conf-estado').innerHTML=' <span style="color:var(--green);font-weight:700;">✓ Confirmado por Mary Delgado · Hace un momento</span>';
+  document.getElementById('fstep7').className='flujo-step done';
+  document.getElementById('fnum7').className='fs-num done';
+  document.getElementById('fnum7').textContent='✓ 7';
+  document.getElementById('fstep8').className='flujo-step active';
+  document.getElementById('fnum8').className='fs-num active';
+  document.getElementById('fnum8').textContent='● 8';
+}
+function propApproveView(){
+  document.getElementById('prop-approve-done').style.display='block';
+  document.getElementById('prop-approve-done').scrollIntoView({behavior:'smooth'});
+}
+function confirmarRecepcion(){
+  document.querySelector('.confirm-btn').style.display='none';
+  document.querySelector('.confirm-btn-s').style.display='none';
+  document.getElementById('confirm-done').style.display='block';
+}
+</script>
+</body>
+</html>

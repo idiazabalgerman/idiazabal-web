@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administración de Alquileres · Idiazabal Inversiones & Bienes Raíces</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --gold:#C9912E;--gold-l:#DFB25A;--gold-d:#8B6214;
+  --cream:#FAF8F3;--cream2:#F4F1EA;--white:#FFFFFF;
+  --stone:#4A4A48;--nav-bg:#5A5855;
+  --border:#E4E0D6;--light:#AEABA2;--mid:#6B6866;--dark:#1E1E1C;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Nunito Sans',sans-serif;background:var(--cream);color:var(--dark);}
+
+/* NAV */
+nav{background:var(--nav-bg);padding:0 4rem;display:flex;align-items:center;justify-content:space-between;height:66px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(201,145,46,0.18);}
+.nav-logo{text-decoration:none;}
+.nav-brand{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:19px;font-weight:500;letter-spacing:1px;line-height:1.1;}
+.nav-brand span{display:block;font-family:'Nunito Sans',sans-serif;font-size:8.5px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-weight:600;}
+.nav-right{display:flex;align-items:center;gap:2rem;}
+.nav-back{color:rgba(245,242,236,0.6);font-size:12.5px;text-decoration:none;cursor:pointer;transition:color 0.2s;}
+.nav-back:hover{color:var(--gold);}
+.nav-cta{background:transparent;color:var(--gold);padding:7px 18px;font-size:12px;font-weight:700;letter-spacing:0.5px;cursor:pointer;border:1px solid rgba(201,145,46,0.45);font-family:'Nunito Sans',sans-serif;transition:all 0.25s;}
+.nav-cta:hover{background:var(--gold);color:var(--nav-bg);}
+
+/* HERO */
+.hero{background:var(--nav-bg);padding:80px 4rem 0;position:relative;overflow:hidden;}
+.hero::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold),transparent);}
+.hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:flex-end;max-width:1100px;}
+.hero-left{padding-bottom:60px;}
+.eyebrow{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:700;}
+.hero h1{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:52px;line-height:1.08;font-weight:400;margin-bottom:16px;}
+.hero h1 em{font-style:italic;color:var(--gold);}
+.hero-desc{color:rgba(245,242,236,0.5);font-size:14.5px;line-height:1.9;font-weight:300;margin-bottom:32px;}
+.hero-checks{display:flex;flex-direction:column;gap:10px;margin-bottom:36px;}
+.hero-check{display:flex;align-items:center;gap:10px;font-size:13.5px;color:rgba(245,242,236,0.55);}
+.hero-check-dot{width:18px;height:18px;border-radius:50%;border:1px solid rgba(201,145,46,0.4);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hero-check-dot span{font-size:9px;color:var(--gold);}
+.hero-btn{display:inline-block;padding:14px 32px;background:var(--gold);color:var(--dark);font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;letter-spacing:0.5px;cursor:pointer;border:none;transition:background 0.2s;}
+.hero-btn:hover{background:var(--gold-l);}
+.hero-btn-s{display:inline-block;padding:12px 24px;background:transparent;color:rgba(245,242,236,0.55);font-size:13px;font-family:'Nunito Sans',sans-serif;cursor:pointer;border:1px solid rgba(245,242,236,0.18);margin-left:10px;transition:all 0.2s;}
+.hero-btn-s:hover{border-color:var(--gold);color:var(--gold);}
+
+/* HERO RIGHT — visual */
+.hero-visual{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);padding:28px;align-self:flex-end;}
+.hero-visual-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:700;}
+.rendicion-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);padding:20px;margin-bottom:10px;}
+.rendicion-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:13px;}
+.rendicion-row:last-child{border-bottom:none;}
+.rendicion-label{color:rgba(245,242,236,0.4);}
+.rendicion-val{color:#F5F2EC;font-weight:600;}
+.rendicion-val.gold{color:var(--gold);}
+.rendicion-val.green{color:#4ADE80;}
+.badge-mes{display:inline-block;font-size:9px;letter-spacing:1px;text-transform:uppercase;background:rgba(201,145,46,0.15);color:var(--gold);padding:3px 10px;border:1px solid rgba(201,145,46,0.25);margin-bottom:14px;}
+
+/* PROPUESTA */
+.section{padding:80px 4rem;}
+.sec-label{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:12px;font-weight:700;}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--dark);margin-bottom:12px;font-weight:400;line-height:1.15;}
+.sec-sub{font-size:14px;color:var(--mid);line-height:1.85;max-width:520px;font-weight:300;}
+
+/* SERVICIOS GRID */
+.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);margin-top:48px;}
+.svc{background:var(--white);padding:36px 30px;position:relative;overflow:hidden;transition:background 0.25s;}
+.svc:hover{background:var(--cream);}
+.svc-icon{width:44px;height:44px;background:rgba(201,145,46,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:18px;}
+.svc-num{font-family:'Cormorant Garamond',serif;font-size:56px;color:rgba(201,145,46,0.06);position:absolute;right:16px;top:10px;font-weight:700;line-height:1;}
+.svc-bar{width:20px;height:2px;background:var(--gold);margin-bottom:16px;}
+.svc h3{font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:10px;color:var(--dark);font-weight:500;}
+.svc p{font-size:13px;color:var(--mid);line-height:1.8;font-weight:300;}
+
+/* COMO FUNCIONA */
+.como-section{background:var(--white);padding:80px 4rem;border-top:1px solid var(--border);}
+.proceso-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:52px;position:relative;}
+.proceso-steps::before{content:'';position:absolute;top:22px;left:10%;right:10%;height:1px;background:var(--border);z-index:0;}
+.paso{text-align:center;padding:0 20px;position:relative;z-index:1;}
+.paso-num{width:44px;height:44px;border-radius:50%;background:var(--cream2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:600;color:var(--gold);}
+.paso.active .paso-num{background:var(--gold);color:var(--dark);border-color:var(--gold);}
+.paso h4{font-family:'Cormorant Garamond',serif;font-size:17px;color:var(--dark);margin-bottom:8px;font-weight:500;}
+.paso p{font-size:12.5px;color:var(--mid);line-height:1.7;font-weight:300;}
+
+/* DIFERENCIAL */
+.dif-section{padding:80px 4rem;background:var(--cream);}
+.dif-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;max-width:1000px;}
+.dif-left h2{font-family:'Cormorant Garamond',serif;font-size:40px;color:var(--dark);font-weight:400;line-height:1.15;margin-bottom:16px;}
+.dif-left h2 em{font-style:italic;color:var(--gold);}
+.dif-left p{font-size:14px;color:var(--mid);line-height:1.85;font-weight:300;}
+.dif-list{margin-top:28px;display:flex;flex-direction:column;gap:16px;}
+.dif-item{display:flex;gap:14px;align-items:flex-start;}
+.dif-item-icon{width:36px;height:36px;background:rgba(201,145,46,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.dif-item-text strong{font-size:13.5px;color:var(--dark);font-weight:600;display:block;margin-bottom:3px;}
+.dif-item-text span{font-size:12.5px;color:var(--mid);line-height:1.6;}
+.dif-right{background:var(--white);border:1px solid var(--border);padding:32px;}
+.dif-right-title{font-family:'Cormorant Garamond',serif;font-size:20px;color:var(--dark);margin-bottom:20px;font-weight:500;}
+.fee-row{display:flex;justify-content:space-between;align-items:center;padding:14px 0;border-bottom:1px solid var(--border);}
+.fee-row:last-child{border-bottom:none;}
+.fee-label{font-size:13px;color:var(--mid);}
+.fee-val{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;color:var(--dark);}
+.fee-note{font-size:10.5px;color:var(--light);margin-top:2px;}
+.fee-highlight{background:rgba(201,145,46,0.06);border:1px solid rgba(201,145,46,0.2);padding:14px;margin-top:16px;font-size:12.5px;color:var(--mid);line-height:1.6;}
+.fee-highlight strong{color:var(--gold);}
+
+/* FORM */
+.form-section{background:var(--nav-bg);padding:80px 4rem;}
+.form-inner{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;max-width:1000px;}
+.form-left h2{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:38px;line-height:1.15;font-weight:400;margin-bottom:14px;}
+.form-left h2 em{font-style:italic;color:var(--gold);}
+.form-left p{color:rgba(245,242,236,0.45);font-size:14px;line-height:1.85;font-weight:300;margin-bottom:28px;}
+.testimonios{display:flex;flex-direction:column;gap:14px;}
+.testimonio{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.07);border-left:3px solid var(--gold);padding:14px 16px;}
+.testimonio p{font-size:13px;color:rgba(245,242,236,0.55);line-height:1.7;font-style:italic;}
+.testimonio span{font-size:11px;color:var(--gold);margin-top:6px;display:block;font-weight:600;}
+.form-card{background:var(--white);padding:32px;}
+.form-card h3{font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--dark);margin-bottom:6px;font-weight:500;}
+.form-card p{font-size:12.5px;color:var(--light);margin-bottom:24px;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.field label{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--light);font-weight:700;}
+.field input,.field select,.field textarea{padding:10px 12px;border:1px solid var(--border);font-size:13px;font-family:'Nunito Sans',sans-serif;color:var(--dark);background:var(--cream);outline:none;transition:border-color 0.2s;appearance:none;width:100%;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);}
+.field textarea{resize:none;height:80px;}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-submit{width:100%;padding:14px;background:var(--gold);color:var(--dark);border:none;font-size:13.5px;font-weight:700;font-family:'Nunito Sans',sans-serif;letter-spacing:0.5px;cursor:pointer;transition:background 0.2s;margin-top:6px;}
+.form-submit:hover{background:var(--gold-l);}
+.form-privacy{font-size:11px;color:var(--light);text-align:center;margin-top:10px;}
+.whatsapp-btn{width:100%;padding:12px;background:transparent;color:#25D366;border:1px solid #25D366;font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:10px;}
+.whatsapp-btn:hover{background:#25D366;color:#fff;}
+
+/* FOOTER */
+footer{background:#3A3836;padding:40px 4rem 24px;}
+.footer-inner{display:flex;justify-content:space-between;align-items:flex-start;gap:40px;margin-bottom:32px;}
+.footer-brand-name{font-family:'Cormorant Garamond',serif;color:#F5F2EC;font-size:18px;font-weight:500;letter-spacing:1px;}
+.footer-brand-sub{font-size:9px;color:var(--gold);letter-spacing:3px;text-transform:uppercase;font-weight:600;}
+.footer-brand p{font-size:12.5px;color:rgba(245,242,236,0.28);line-height:1.8;margin-top:12px;max-width:240px;font-weight:300;}
+.footer-col h4{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-bottom:14px;font-weight:700;}
+.footer-col a{display:block;font-size:12.5px;color:rgba(245,242,236,0.3);margin-bottom:8px;cursor:pointer;text-decoration:none;transition:color 0.2s;}
+.footer-col a:hover{color:var(--gold);}
+.footer-div{border:none;border-top:1px solid rgba(245,242,236,0.06);margin-bottom:18px;}
+.footer-bottom{display:flex;justify-content:space-between;}
+.footer-bottom p{font-size:11.5px;color:rgba(245,242,236,0.18);}
+.tok-powered{font-size:11px;color:rgba(245,242,236,0.18);}
+.tok-powered span{color:var(--gold);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.a{animation:fadeUp 0.55s ease forwards;opacity:0;}
+.a1{animation-delay:.05s;}
+.a2{animation-delay:.18s;}
+.a3{animation-delay:.32s;}
+.a4{animation-delay:.46s;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#">
+    <div class="nav-brand">IDIAZABAL<span>Inversiones & Bienes Raíces</span></div>
+  </a>
+  <div class="nav-right">
+    <a class="nav-back" href="#">← Volver al inicio</a>
+    <button class="nav-cta" onclick="document.getElementById('form-section').scrollIntoView({behavior:'smooth'})">Quiero que administren mi propiedad</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="eyebrow a a1">Administración de alquileres · La Plata y zona</div>
+      <h1 class="a a2">Tu propiedad rinde,<br><em>vos descansás</em></h1>
+      <p class="hero-desc a a3">Nos ocupamos de todo: publicación, selección de inquilinos, cobro del alquiler, gestión de conflictos y rendición mensual. Sin preocupaciones.</p>
+      <div class="hero-checks a a3">
+        <div class="hero-check"><div class="hero-check-dot"><span>✓</span></div> Cobro garantizado todos los meses</div>
+        <div class="hero-check"><div class="hero-check-dot"><span>✓</span></div> Selección rigurosa de inquilinos</div>
+        <div class="hero-check"><div class="hero-check-dot"><span>✓</span></div> Rendición mensual con detalle completo</div>
+        <div class="hero-check"><div class="hero-check-dot"><span>✓</span></div> Gestión de mantenimiento incluida</div>
+      </div>
+      <div class="a a4">
+        <button class="hero-btn" onclick="document.getElementById('form-section').scrollIntoView({behavior:'smooth'})">Quiero que administren mi propiedad</button>
+        <button class="hero-btn-s" onclick="document.getElementById('como').scrollIntoView({behavior:'smooth'})">¿Cómo funciona?</button>
+      </div>
+    </div>
+
+    <!-- VISUAL: simulación de rendición -->
+    <div class="hero-visual a a4">
+      <div class="hero-visual-title">Rendición mensual · Ejemplo</div>
+      <span class="badge-mes">Marzo 2026</span>
+      <div class="rendicion-card">
+        <div class="rendicion-row"><span class="rendicion-label">Alquiler cobrado</span><span class="rendicion-val">$ 380.000</span></div>
+        <div class="rendicion-row"><span class="rendicion-label">Expensas gestionadas</span><span class="rendicion-val">$ 28.500</span></div>
+        <div class="rendicion-row"><span class="rendicion-label">Honorarios Idiazabal (8%)</span><span class="rendicion-val">$ 30.400</span></div>
+        <div class="rendicion-row"><span class="rendicion-label">Mantenimiento</span><span class="rendicion-val">$ 0</span></div>
+        <div class="rendicion-row"><span class="rendicion-label" style="font-weight:700;color:rgba(245,242,236,0.7);">Transferido al propietario</span><span class="rendicion-val green" style="font-size:18px;">$ 349.600</span></div>
+      </div>
+      <div style="font-size:11px;color:rgba(245,242,236,0.3);margin-top:8px;">Transferencia automática el día 5 de cada mes</div>
+    </div>
+  </div>
+</div>
+
+<!-- QUÉ INCLUYE -->
+<div class="section">
+  <div class="sec-label">Nuestro servicio</div>
+  <div class="sec-title">Todo incluido, sin letra chica</div>
+  <div class="sec-sub">Un solo honorario mensual cubre todo lo que necesitás para que tu propiedad funcione sola.</div>
+  <div class="svc-grid">
+    <div class="svc">
+      <span class="svc-num">01</span>
+      <div class="svc-bar"></div>
+      <h3>Publicación y difusión</h3>
+      <p>Publicamos tu propiedad en ZonaProp, Argenprop, MercadoLibre y nuestro sitio. Fotos profesionales y descripción optimizada.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">02</span>
+      <div class="svc-bar"></div>
+      <h3>Selección de inquilinos</h3>
+      <p>Evaluamos solvencia, historial crediticio y referencias laborales. Solo te presentamos candidatos calificados.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">03</span>
+      <div class="svc-bar"></div>
+      <h3>Contratos y documentación</h3>
+      <p>Redacción del contrato de alquiler, gestión de garantías y toda la documentación legal al día.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">04</span>
+      <div class="svc-bar"></div>
+      <h3>Cobro garantizado</h3>
+      <p>Gestionamos el cobro mensual del alquiler y te transferimos el importe neto en fecha fija, todos los meses.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">05</span>
+      <div class="svc-bar"></div>
+      <h3>Mantenimiento y reparaciones</h3>
+      <p>Coordinamos con proveedores de confianza para reparaciones urgentes y mantenimiento preventivo. Sin que te molesten.</p>
+    </div>
+    <div class="svc">
+      <span class="svc-num">06</span>
+      <div class="svc-bar"></div>
+      <h3>Rendición mensual detallada</h3>
+      <p>Recibís un informe mensual con cada movimiento: cobros, gastos, retenciones y transferencia. Transparencia total.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<div class="como-section" id="como">
+  <div class="sec-label">El proceso</div>
+  <div class="sec-title">Simple desde el primer día</div>
+  <div class="proceso-steps">
+    <div class="paso active">
+      <div class="paso-num">1</div>
+      <h4>Nos contactás</h4>
+      <p>Completás el formulario o nos escribís por WhatsApp. Un asesor te llama en menos de 24 horas.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">2</div>
+      <h4>Visita y tasación</h4>
+      <p>Visitamos la propiedad, determinamos el precio de alquiler óptimo y acordamos los términos.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">3</div>
+      <h4>Publicamos y buscamos</h4>
+      <p>En 48 horas tu propiedad está publicada. Seleccionamos al mejor inquilino y firmamos el contrato.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">4</div>
+      <h4>Vos solo cobrás</h4>
+      <p>El día 5 de cada mes recibís la transferencia con la rendición detallada. Nosotros nos ocupamos del resto.</p>
+    </div>
+  </div>
+</div>
+
+<!-- DIFERENCIAL + HONORARIOS -->
+<div class="dif-section">
+  <div class="dif-grid">
+    <div class="dif-left">
+      <h2>¿Por qué elegir<br><em>Idiazabal</em>?</h2>
+      <p>Con más de 10 años administrando propiedades en La Plata, conocemos cada barrio, cada juez y cada plomero de confianza. Eso marca la diferencia.</p>
+      <div class="dif-list">
+        <div class="dif-item">
+          <div class="dif-item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div class="dif-item-text">
+            <strong>Respaldo legal incluido</strong>
+            <span>Asesoramiento en conflictos con inquilinos, desalojos y actualizaciones de alquiler según ley.</span>
+          </div>
+        </div>
+        <div class="dif-item">
+          <div class="dif-item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div class="dif-item-text">
+            <strong>Respuesta en menos de 2 horas</strong>
+            <span>Ante cualquier urgencia del inquilino, nuestro equipo responde y actúa sin molestarte a vos.</span>
+          </div>
+        </div>
+        <div class="dif-item">
+          <div class="dif-item-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C9912E" stroke-width="1.5" stroke-linecap="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          </div>
+          <div class="dif-item-text">
+            <strong>Actualización automática del alquiler</strong>
+            <span>Aplicamos los índices ICL en tiempo y forma, sin que tengas que recordarlo ni negociarlo.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="dif-right">
+      <div class="dif-right-title">Nuestros honorarios</div>
+      <div class="fee-row">
+        <div><div class="fee-label">Administración mensual</div><div class="fee-note">Cobro, gestión y rendición incluidos</div></div>
+        <div class="fee-val">8%</div>
+      </div>
+      <div class="fee-row">
+        <div><div class="fee-label">Comisión por nueva locación</div><div class="fee-note">Un mes de alquiler, una sola vez</div></div>
+        <div class="fee-val">1 mes</div>
+      </div>
+      <div class="fee-row">
+        <div><div class="fee-label">Renovación de contrato</div><div class="fee-note">Gestión, actualización y firma</div></div>
+        <div class="fee-val">Sin costo</div>
+      </div>
+      <div class="fee-row">
+        <div><div class="fee-label">Mantenimiento y reparaciones</div><div class="fee-note">Solo se cobra lo que realmente se gasta</div></div>
+        <div class="fee-val">A costo</div>
+      </div>
+      <div class="fee-highlight">
+        <strong>Sin costos ocultos.</strong> Lo que acordamos es lo que pagás. Antes de firmar sabés exactamente cuánto recibís cada mes.
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FORMULARIO -->
+<div class="form-section" id="form-section">
+  <div class="form-inner">
+    <div class="form-left">
+      <h2>Empezamos<br>cuando <em>quieras</em></h2>
+      <p>Completá el formulario y un asesor te contacta en menos de 24 horas para coordinar la visita a tu propiedad. Sin compromiso.</p>
+      <div class="testimonios">
+        <div class="testimonio">
+          <p>"Llevo 3 años con Idiazabal administrando mi departamento en el centro. Nunca tuve un problema que no resolvieran solos. El día 5 tengo la plata en la cuenta, sin falta."</p>
+          <span>— Marcela R. · Propietaria desde 2022</span>
+        </div>
+        <div class="testimonio">
+          <p>"Me fui a vivir al exterior y no sabía cómo manejar mi casa desde allá. Ellos se ocupan de absolutamente todo. Solo recibo el resumen mensual."</p>
+          <span>— Gonzalo T. · Propietario desde 2023</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card">
+      <h3>Contactanos hoy</h3>
+      <p>Te respondemos en menos de 24 horas · Visita gratuita y sin compromiso</p>
+      <div class="fg2">
+        <div class="field"><label>Nombre</label><input type="text" placeholder="Tu nombre completo"></div>
+        <div class="field"><label>Teléfono (WhatsApp)</label><input type="text" placeholder="+54 9 221..."></div>
+      </div>
+      <div class="field"><label>E-mail</label><input type="email" placeholder="tu@email.com"></div>
+      <div class="fg2">
+        <div class="field">
+          <label>Tipo de propiedad</label>
+          <select><option>Casa</option><option>Departamento</option><option>PH</option><option>Duplex</option><option>Local comercial</option></select>
+        </div>
+        <div class="field">
+          <label>Zona</label>
+          <select>
+            <option value="">Seleccioná</option>
+            <option>Zona Norte</option><option>Centro</option><option>Meridiano V</option>
+            <option>Los Hornos</option><option>City Bell</option><option>Gonnet</option><option>Otra</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>¿Está alquilada actualmente?</label>
+        <select><option>No, está vacía</option><option>Sí, con contrato vigente</option><option>Sí, el contrato vence pronto</option></select>
+      </div>
+      <div class="field"><label>Comentarios (opcional)</label><textarea placeholder="Contanos algo más sobre tu propiedad o tu situación actual..."></textarea></div>
+      <button class="form-submit" onclick="submitForm()">Quiero que administren mi propiedad →</button>
+      <button class="whatsapp-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Escribir por WhatsApp
+      </button>
+      <div class="form-privacy">Tus datos son confidenciales. No los compartimos con terceros.</div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="footer-brand-name">IDIAZABAL</div>
+      <div class="footer-brand-sub">Inversiones & Bienes Raíces</div>
+      <p>Especialistas en propiedades residenciales en La Plata y Gran Buenos Aires.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Servicios</h4>
+      <a>Comprar propiedad</a><a>Vender o tasar</a><a>Administración</a><a>Alquileres</a>
+    </div>
+    <div class="footer-col">
+      <h4>Empresa</h4>
+      <a>Nosotros</a><a>Contacto</a><a>WhatsApp</a><a>Instagram</a>
+    </div>
+  </div>
+  <hr class="footer-div">
+  <div class="footer-bottom">
+    <p>© 2026 Idiazabal Inversiones & Bienes Raíces · La Plata, Buenos Aires</p>
+    <div class="tok-powered">Gestionado con <span>Tokko Broker</span></div>
+  </div>
+</footer>
+
+<script>
+function submitForm(){
+  const btn = document.querySelector('.form-submit');
+  btn.textContent = '✓ Solicitud enviada — Te contactamos pronto';
+  btn.style.background = '#22C55E';
+  btn.style.color = '#fff';
+  btn.disabled = true;
+}
+</script>
+</body>
+</html>
