@@ -135,6 +135,11 @@ footer{background:#3A3836;padding:44px 4rem 24px;}
 .a{animation:fadeUp 0.55s ease forwards;opacity:0;}
 .a1{animation-delay:.05s;}.a2{animation-delay:.18s;}.a3{animation-delay:.3s;}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.co', 'sb_publishable_AkOPZRdNPzjzk9ZGQmiopQ_rEj5S3Ic');
+</script>
 </head>
 <body>
 
@@ -512,11 +517,30 @@ footer{background:#3A3836;padding:44px 4rem 24px;}
 </footer>
 
 <script>
-function submitForm(btn){
-  btn.textContent='✓ Consulta enviada — Te respondemos pronto';
-  btn.style.background='#22C55E';
-  btn.style.color='#fff';
-  btn.disabled=true;
+async function submitForm(btn){
+  const nombre = document.querySelector('.form-card input[type="text"]').value;
+  const telefono = document.querySelectorAll('.form-card input[type="text"]')[1].value;
+  const email = document.querySelector('.form-card input[type="email"]').value;
+  const motivo = document.querySelector('.form-card select').value;
+  const mensaje = document.querySelector('.form-card textarea').value;
+  
+  btn.textContent = 'Enviando...';
+  btn.disabled = true;
+
+  const { error } = await _supabase.from('contactos').insert([{
+    nombre, telefono, email, motivo, mensaje
+  }]);
+
+  if (error) {
+    btn.textContent = 'Error al enviar. Intentá de nuevo.';
+    btn.style.background = '#EF4444';
+    btn.style.color = '#fff';
+    btn.disabled = false;
+  } else {
+    btn.textContent = '✓ Consulta enviada — Te respondemos pronto';
+    btn.style.background = '#22C55E';
+    btn.style.color = '#fff';
+  }
 }
 </script>
 </body>

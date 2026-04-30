@@ -151,6 +151,11 @@ footer{background:#3A3836;padding:40px 4rem 24px;}
 .a3{animation-delay:.32s;}
 .a4{animation-delay:.46s;}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.co', 'sb_publishable_AkOPZRdNPzjzk9ZGQmiopQ_rEj5S3Ic');
+</script>
 </head>
 <body>
 
@@ -414,12 +419,34 @@ footer{background:#3A3836;padding:40px 4rem 24px;}
 </footer>
 
 <script>
-function submitForm(){
+async function submitForm(){
   const btn = document.querySelector('.form-submit');
-  btn.textContent = '✓ Solicitud enviada — Te contactamos pronto';
-  btn.style.background = '#22C55E';
-  btn.style.color = '#fff';
+  const inputs = document.querySelectorAll('.form-card input, .form-card select, .form-card textarea');
+  const nombre = inputs[0]?.value || '';
+  const telefono = inputs[1]?.value || '';
+  const email = inputs[2]?.value || '';
+  const tipo_propiedad = inputs[3]?.value || '';
+  const zona = inputs[4]?.value || '';
+  const estado_alquiler = inputs[5]?.value || '';
+  const comentarios = inputs[6]?.value || '';
+
+  btn.textContent = 'Enviando...';
   btn.disabled = true;
+
+  const { error } = await _supabase.from('administracion').insert([{
+    nombre, telefono, email, tipo_propiedad, zona, estado_alquiler, comentarios
+  }]);
+
+  if (error) {
+    btn.textContent = 'Error al enviar. Intentá de nuevo.';
+    btn.style.background = '#EF4444';
+    btn.style.color = '#fff';
+    btn.disabled = false;
+  } else {
+    btn.textContent = '✓ Solicitud enviada — Te contactamos pronto';
+    btn.style.background = '#22C55E';
+    btn.style.color = '#fff';
+  }
 }
 </script>
 </body>

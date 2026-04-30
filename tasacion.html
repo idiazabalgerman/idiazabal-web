@@ -219,6 +219,11 @@ tr.hl td{background:#FDFBF5;}
 .mfg2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
 .modal-submit{width:100%;padding:12px;background:var(--gold);color:var(--dark);border:none;font-size:13px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;margin-top:4px;}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.co', 'sb_publishable_AkOPZRdNPzjzk9ZGQmiopQ_rEj5S3Ic');
+</script>
 </head>
 <body>
 
@@ -659,10 +664,25 @@ function buildChart(){
   });
 }
 
-function unlockReport(){
+async function unlockReport(){
   const nombre=document.getElementById('u-nombre').value.trim();
   const tel=document.getElementById('u-tel').value.trim();
+  const email=document.getElementById('u-mail').value.trim();
   if(!nombre||!tel){alert('Por favor ingresá tu nombre y teléfono.');return;}
+  
+  // Guardar en Supabase
+  const zona = document.getElementById('f-zona')?.value || '';
+  const tipo = document.getElementById('f-tipo')?.value || '';
+  const sup = document.getElementById('f-sup')?.value || '';
+  const ter = document.getElementById('f-ter')?.value || '';
+  const amb = document.getElementById('f-amb')?.value || '';
+
+  await _supabase.from('tasaciones').insert([{
+    nombre, telefono: tel, email, zona, tipo,
+    superficie_cubierta: sup, superficie_terreno: ter,
+    ambientes: amb, precio_estimado: 'USD 185.000'
+  }]);
+
   document.getElementById('price-locked').style.display='none';
   document.getElementById('price-unlocked').style.display='block';
   document.getElementById('unlock-form-card').style.display='none';

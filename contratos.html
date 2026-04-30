@@ -215,6 +215,11 @@ nav{background:var(--nav-bg);padding:0 3rem;display:flex;align-items:center;just
 .confirm-done strong{color:#166534;font-size:14px;}
 .confirm-done p{font-size:12.5px;color:#166534;margin-top:4px;}
 </style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.co', 'sb_publishable_AkOPZRdNPzjzk9ZGQmiopQ_rEj5S3Ic');
+</script>
 </head>
 <body>
 
@@ -688,7 +693,19 @@ function addGarante(){
   <div class="upload-ok" id="g${gc}-up"><span>✓</span> Documentación del garante cargada</div>`;
   document.getElementById('garantes-extra').appendChild(d);
 }
-function enviarForm(){
+async function enviarForm(){
+  const nombre = document.querySelector('.fcard-body input[placeholder="Nombre y apellido completo"]')?.value || '';
+  const dni = document.querySelector('.fcard-body input[placeholder="DNI"]')?.value || '';
+  const telefono = document.querySelector('.fcard-body input[placeholder="+54 9 221..."]')?.value || '';
+  const email = document.querySelector('.fcard-body input[type="email"]')?.value || '';
+  const domicilio = document.querySelector('.fcard-body input[placeholder="Calle, número, piso, depto, ciudad"]')?.value || '';
+
+  await _supabase.from('inquilinos').insert([{
+    inmueble: 'Calle 7 Nº 31 Piso 3 Dpto A',
+    nombre, dni, telefono, email, domicilio,
+    estado: 'Documentación recibida'
+  }]);
+
   document.getElementById('form-content').style.display='none';
   document.getElementById('form-success').style.display='block';
   document.getElementById('form-success').scrollIntoView({behavior:'smooth'});
