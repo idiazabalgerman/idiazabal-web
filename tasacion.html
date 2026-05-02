@@ -125,6 +125,42 @@ nav{background:var(--nav-bg);padding:0 4rem;display:flex;align-items:center;just
 .load-fill{height:100%;background:var(--gold);transition:width 1.2s ease;width:0%;}
 .load-msg{font-size:12px;color:var(--light);}
 
+
+/* TERMOMETRO DE PRECISION - STICKY */
+.prec-sticky{
+  position:sticky;top:66px;z-index:99;
+  background:var(--white);
+  border-top:3px solid var(--gold);
+  border-bottom:1px solid var(--border);
+  padding:10px 4rem;
+  display:flex;align-items:center;gap:20px;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);
+}
+.prec-sticky-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--light);white-space:nowrap;font-weight:700;}
+.prec-sticky-bar-wrap{flex:1;height:10px;background:var(--border);border-radius:5px;overflow:hidden;position:relative;}
+.prec-sticky-bar{height:100%;border-radius:5px;transition:width 0.7s ease,background 0.5s ease;width:0%;}
+.prec-sticky-cap{position:absolute;right:15%;top:0;bottom:0;width:2px;background:rgba(0,0,0,0.15);}
+.prec-sticky-pct{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--dark);white-space:nowrap;min-width:60px;text-align:right;}
+.prec-sticky-msg{font-size:11px;color:var(--mid);white-space:nowrap;}
+
+/* PRECISION EN EL REPORTE */
+.precision-wrap{background:var(--white);border:1px solid var(--border);padding:20px 24px;margin-bottom:18px;}
+.precision-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.precision-title{font-size:12px;font-weight:700;color:var(--dark);letter-spacing:0.5px;text-transform:uppercase;}
+.precision-items{display:flex;flex-direction:column;gap:6px;margin-top:12px;}
+.prec-item{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--light);}
+.prec-item.done{color:var(--dark);}
+.prec-item.done .prec-dot{background:var(--green);}
+.prec-dot{width:8px;height:8px;border-radius:50%;background:var(--border);flex-shrink:0;transition:background 0.3s;}
+.prec-plus{font-size:10px;font-weight:700;color:var(--gold);margin-left:auto;}
+.precision-msg{background:var(--cream2);border:1px solid var(--border);border-left:3px solid var(--gold);padding:10px 14px;font-size:12px;color:var(--mid);margin-top:12px;line-height:1.6;display:none;}
+.precision-msg.show{display:block;}
+.precision-cta{background:var(--nav-bg);padding:14px 18px;margin-top:12px;display:none;}
+.precision-cta.show{display:block;}
+.precision-cta p{font-size:12.5px;color:rgba(245,242,236,0.6);margin-bottom:10px;line-height:1.6;}
+.precision-cta p strong{color:#F5F2EC;}
+.precision-cta button{width:100%;padding:11px;background:var(--gold);color:var(--dark);border:none;font-size:12.5px;font-weight:700;font-family:'Nunito Sans',sans-serif;cursor:pointer;}
+
 /* REPORT */
 .report{display:none;}
 .price-hero{background:var(--nav-bg);padding:36px;text-align:center;margin-bottom:18px;position:relative;overflow:hidden;}
@@ -236,6 +272,17 @@ const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.c
     <span class="nav-tag">Tasación online</span>
   </div>
 </nav>
+
+<!-- BARRA DE PRECISION STICKY -->
+<div class="prec-sticky" id="prec-sticky">
+  <span class="prec-sticky-label">Precisión</span>
+  <div class="prec-sticky-bar-wrap">
+    <div class="prec-sticky-bar" id="prec-bar-sticky"></div>
+    <div class="prec-sticky-cap"></div>
+  </div>
+  <span class="prec-sticky-pct"><span id="prec-num-sticky">0</span>%</span>
+  <span class="prec-sticky-msg" id="prec-sticky-msg">Completá el formulario para aumentar la precisión</span>
+</div>
 
 <div class="hero-band">
   <div class="hero-band-inner">
@@ -452,6 +499,35 @@ const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.c
       </div>
     </div>
 
+
+    <!-- TERMOMETRO DE PRECISION -->
+    <div class="precision-wrap" id="precision-wrap">
+      <div class="precision-header">
+        <div class="precision-title">Precisión de la tasación</div>
+        <div class="precision-pct"><span id="prec-num">0</span>% <span>de precisión</span></div>
+      </div>
+      <div class="precision-bar-wrap">
+        <div class="precision-bar" id="prec-bar"></div>
+      </div>
+      <div class="precision-items">
+        <div class="prec-item" id="pi-zona"><div class="prec-dot"></div>Zona seleccionada<span class="prec-plus">+15%</span></div>
+        <div class="prec-item" id="pi-tipo"><div class="prec-dot"></div>Tipo de propiedad<span class="prec-plus">+10%</span></div>
+        <div class="prec-item" id="pi-sup"><div class="prec-dot"></div>Superficie y ambientes<span class="prec-plus">+15%</span></div>
+        <div class="prec-item" id="pi-estado"><div class="prec-dot"></div>Estado y antigüedad<span class="prec-plus">+10%</span></div>
+        <div class="prec-item" id="pi-extras"><div class="prec-dot"></div>Extras y amenities<span class="prec-plus">+5%</span></div>
+        <div class="prec-item" id="pi-fotos"><div class="prec-dot"></div>Fotos del inmueble<span class="prec-plus">+15%</span></div>
+        <div class="prec-item" id="pi-escritura"><div class="prec-dot"></div>Escritura cargada con IA<span class="prec-plus">+15%</span></div>
+      </div>
+      <div class="precision-msg" id="prec-msg-85">
+        <strong style="color:var(--dark);">Llegaste al máximo de precisión online (85%)</strong><br>
+        Para alcanzar el 100%, un asesor de Idiazabal puede visitar la propiedad y revisar cada detalle in situ.
+      </div>
+      <div class="precision-cta" id="prec-cta-85">
+        <p><strong>¿Querés el precio exacto?</strong><br>Coordiná una visita gratuita y sin compromiso. Uno de nuestros asesores revisa la propiedad y te da el valor definitivo.</p>
+        <button onclick="document.getElementById('cta-remate').scrollIntoView({behavior:'smooth'})">Coordinar visita del asesor →</button>
+      </div>
+    </div>
+
     <div class="metrics">
       <div class="metric"><div class="metric-val">USD 980</div><div class="metric-sub">Precio m² zona</div><div class="metric-trend">↑ Tendencia alcista</div></div>
       <div class="metric"><div class="metric-val">+4.2%</div><div class="metric-sub">Variación 6 meses</div><div class="metric-trend">↑ Mercado activo</div></div>
@@ -566,6 +642,7 @@ function processEscritura(input){
   setTimeout(()=>{
     proc.style.display='none';
     document.getElementById('ai-success').style.display='flex';
+    updatePrecision('escritura');
     // Autocompletar campos simulando extracción IA
     const campos=[
       {id:'f-zona',val:'Zona Norte',type:'select'},
@@ -601,6 +678,7 @@ function handleDrop(e){
   handleFotos(e.dataTransfer.files);
 }
 function renderFotos(){
+  if(fotosFiles.length > 0) updatePrecision("fotos");
   const grid=document.getElementById('fotos-grid');
   const counter=document.getElementById('fotos-counter');
   const badge=document.getElementById('fotos-badge');
@@ -655,11 +733,91 @@ function runAnalysis(){
       setTimeout(()=>{
         document.getElementById('sec-loading').style.display='none';
         document.getElementById('sec-report').style.display='block';
-        setStep(3);buildChart();
+        setStep(3);buildChart();initPrecision();
         window.scrollTo({top:0,behavior:'smooth'});
       },500);
     }
   },250);
+}
+
+
+// TERMOMETRO DE PRECISION
+const precItems = {
+  zona: { id: 'pi-zona', pts: 15, done: false },
+  tipo: { id: 'pi-tipo', pts: 10, done: false },
+  sup: { id: 'pi-sup', pts: 15, done: false },
+  estado: { id: 'pi-estado', pts: 10, done: false },
+  extras: { id: 'pi-extras', pts: 5, done: false },
+  fotos: { id: 'pi-fotos', pts: 15, done: false },
+  escritura: { id: 'pi-escritura', pts: 15, done: false },
+};
+
+function calcPrecision(){
+  let total = 0;
+  Object.values(precItems).forEach(item => { if(item.done) total += item.pts; });
+  return Math.min(total, 85);
+}
+
+function getPrecColor(pct){
+  if(pct <= 30) return '#EF4444';
+  if(pct <= 70) return '#F59E0B';
+  return '#22C55E';
+}
+
+function getPrecMsg(pct){
+  if(pct === 0) return 'Completá el formulario para aumentar la precisión';
+  if(pct <= 30) return 'Agregá más datos para mejorar la precisión';
+  if(pct <= 60) return 'Vas bien — seguí completando para afinar el precio';
+  if(pct <= 84) return 'Casi lista — subí fotos o la escritura para llegar al máximo';
+  return '85% online alcanzado · Coordiná una visita para el 100%';
+}
+
+function updatePrecision(key){
+  if(!precItems[key]) return;
+  precItems[key].done = true;
+  const el = document.getElementById(precItems[key].id);
+  if(el) el.classList.add('done');
+
+  const pct = calcPrecision();
+  const color = getPrecColor(pct);
+
+  // Barra sticky
+  const barS = document.getElementById('prec-bar-sticky');
+  const numS = document.getElementById('prec-num-sticky');
+  const msgS = document.getElementById('prec-sticky-msg');
+  if(barS){ barS.style.width = pct + '%'; barS.style.background = color; }
+  if(numS) numS.textContent = pct;
+  if(msgS) msgS.textContent = getPrecMsg(pct);
+
+  // Barra en reporte
+  const bar = document.getElementById('prec-bar');
+  const num = document.getElementById('prec-num');
+  if(bar){ bar.style.width = pct + '%'; bar.style.background = color; }
+  if(num) num.textContent = pct;
+
+  if(pct >= 85){
+    document.getElementById('prec-msg-85')?.classList.add('show');
+    document.getElementById('prec-cta-85')?.classList.add('show');
+  }
+}
+
+// Inicializar precision cuando carga el reporte
+function initPrecision(){
+  if(document.getElementById('f-zona')?.value) updatePrecision('zona');
+  if(document.getElementById('f-tipo')?.value) updatePrecision('tipo');
+  if(document.getElementById('f-sup')?.value) updatePrecision('sup');
+  if(document.getElementById('f-amb')?.value) updatePrecision('sup');
+  if(document.getElementById('f-ter')?.value) updatePrecision('sup');
+  // Estado
+  const estado = document.querySelector('select[id]');
+  if(estado?.value) updatePrecision('estado');
+  // Extras seleccionados
+  const extrasOn = document.querySelectorAll('.extra.on');
+  if(extrasOn.length > 0) updatePrecision('extras');
+  // Fotos
+  if(fotosFiles && fotosFiles.length > 0) updatePrecision('fotos');
+  // Escritura
+  if(document.getElementById('ai-success')?.style.display !== 'none') updatePrecision('escritura');
 }
 
 function buildChart(){
@@ -756,6 +914,47 @@ async function unlockReport(){ await verificarCodigo(); }
 
 function openModal(){document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}
+
+// ACTUALIZAR PRECISION EN TIEMPO REAL
+document.addEventListener('DOMContentLoaded', function(){
+  // Zona
+  const zonaEl = document.getElementById('f-zona');
+  if(zonaEl) zonaEl.addEventListener('change', function(){
+    if(this.value) updatePrecision('zona');
+  });
+
+  // Tipo
+  const tipoEl = document.getElementById('f-tipo');
+  if(tipoEl) tipoEl.addEventListener('change', function(){
+    if(this.value) updatePrecision('tipo');
+  });
+
+  // Superficie
+  const supEl = document.getElementById('f-sup');
+  const ambEl = document.getElementById('f-amb');
+  if(supEl) supEl.addEventListener('input', function(){
+    if(this.value) updatePrecision('sup');
+  });
+  if(ambEl) ambEl.addEventListener('change', function(){
+    if(this.value) updatePrecision('sup');
+  });
+
+  // Estado
+  const selects = document.querySelectorAll('.fg3 select');
+  selects.forEach(sel => sel.addEventListener('change', function(){
+    updatePrecision('estado');
+  }));
+
+  // Extras
+  document.querySelectorAll('.extra').forEach(el => {
+    el.addEventListener('click', function(){
+      setTimeout(()=>{
+        const on = document.querySelectorAll('.extra.on');
+        if(on.length > 0) updatePrecision('extras');
+      }, 50);
+    });
+  });
+});
 </script>
 </body>
 </html>
