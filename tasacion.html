@@ -485,14 +485,32 @@ const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.c
 
     <div class="unlock-form-card" id="unlock-form-card">
       <h2>Tu precio estimado: <em>USD ••••••</em></h2>
-      <p>Dejá tus datos para ver el valor exacto, el rango de precios<br>y acceder al informe completo del mercado.</p>
-      <div class="uf-grid">
-        <input type="text" placeholder="Tu nombre" id="u-nombre">
-        <input type="text" placeholder="Teléfono (WhatsApp)" id="u-tel">
-        <input type="email" placeholder="Tu e-mail" class="uf-full" id="u-mail">
-        <button class="uf-submit" onclick="unlockReport()">Ver mi tasación gratuita →</button>
+      <p>Dejá tus datos para ver el valor exacto y acceder al informe completo.</p>
+
+      <!-- PASO A: datos -->
+      <div id="unlock-step-a">
+        <div class="uf-grid">
+          <input type="text" placeholder="Tu nombre" id="u-nombre">
+          <input type="text" placeholder="Teléfono (WhatsApp)" id="u-tel">
+          <input type="email" placeholder="Tu e-mail" class="uf-full" id="u-mail">
+          <button class="uf-submit" onclick="solicitarCodigo()">Recibir código de verificación →</button>
+        </div>
+        <div class="privacy">Te enviaremos un código al mail para verificar tu identidad.</div>
       </div>
-      <div class="privacy">Tu información es confidencial. No compartimos tus datos con terceros.</div>
+
+      <!-- PASO B: verificacion (oculto) -->
+      <div id="unlock-step-b" style="display:none;">
+        <div style="background:var(--green-bg);border:1px solid var(--green-border);padding:12px 16px;margin-bottom:16px;font-size:13px;color:#166534;">
+          ✓ Código enviado a <strong id="mail-display"></strong>
+        </div>
+        <div class="uf-grid">
+          <input type="text" placeholder="Ingresá el código de 6 dígitos" class="uf-full" id="u-codigo" maxlength="6" style="text-align:center;font-size:22px;letter-spacing:8px;font-weight:700;">
+          <button class="uf-submit" onclick="verificarCodigo()">Verificar y ver mi tasación →</button>
+        </div>
+        <div class="privacy" style="margin-top:8px;">
+          ¿No llegó el mail? <span style="color:var(--gold);cursor:pointer;font-weight:700;" onclick="solicitarCodigo()">Reenviar código</span>
+        </div>
+      </div>
     </div>
 
     <div class="cta-remate" id="cta-remate">
@@ -664,12 +682,56 @@ function buildChart(){
   });
 }
 
-async function unlockReport(){
-  const nombre=document.getElementById('u-nombre').value.trim();
-  const tel=document.getElementById('u-tel').value.trim();
-  const email=document.getElementById('u-mail').value.trim();
-  if(!nombre||!tel){alert('Por favor ingresá tu nombre y teléfono.');return;}
-  
+let _codigoEnviado = null;
+
+async function solicitarCodigo(){
+  const nombre = document.getElementById('u-nombre').value.trim();
+  const tel = document.getElementById('u-tel').value.trim();
+  const email = document.getElementById('u-mail').value.trim();
+
+  if(!nombre || !tel) { alert('Por favor ingresá tu nombre y teléfono.'); return; }
+  if(!email || !email.includes('@')) { alert('Por favor ingresá un e-mail válido.'); return; }
+
+  const btn = document.querySelector('#unlock-step-a .uf-submit');
+  btn.textContent = 'Enviando código...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/send-code', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, nombre })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      _codigoEnviado = data.codigo;
+      document.getElementById('mail-display').textContent = email;
+      document.getElementById('unlock-step-a').style.display = 'none';
+      document.getElementById('unlock-step-b').style.display = 'block';
+    } else {
+      alert('Error al enviar el código. Intentá de nuevo.');
+      btn.textContent = 'Recibir código de verificación →';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    alert('Error de conexión. Intentá de nuevo.');
+    btn.textContent = 'Recibir código de verificación →';
+    btn.disabled = false;
+  }
+}
+
+async function verificarCodigo(){
+  const codigo = document.getElementById('u-codigo').value.trim();
+  const nombre = document.getElementById('u-nombre').value.trim();
+  const tel = document.getElementById('u-tel').value.trim();
+  const email = document.getElementById('u-mail').value.trim();
+
+  if(codigo !== _codigoEnviado) {
+    alert('Código incorrecto. Revisá tu mail e intentá de nuevo.');
+    return;
+  }
+
   // Guardar en Supabase
   const zona = document.getElementById('f-zona')?.value || '';
   const tipo = document.getElementById('f-tipo')?.value || '';
@@ -689,6 +751,8 @@ async function unlockReport(){
   document.getElementById('cta-remate').style.display='block';
   document.getElementById('cta-remate').scrollIntoView({behavior:'smooth'});
 }
+
+async function unlockReport(){ await verificarCodigo(); }
 
 function openModal(){document.getElementById('modal-bg').classList.add('open');}
 function closeModal(){document.getElementById('modal-bg').classList.remove('open');}

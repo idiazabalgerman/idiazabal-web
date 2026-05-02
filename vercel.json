@@ -5,6 +5,7 @@
     { "src": "/tasacion", "dest": "/tasacion.html" },
     { "src": "/administracion", "dest": "/administracion.html" },
     { "src": "/nosotros", "dest": "/nosotros.html" },
-    { "src": "/contratos", "dest": "/contratos.html" }
+    { "src": "/contratos", "dest": "/contratos.html" },
+    { "src": "/api/(.*)", "dest": "/api/$1" }
   ]
 }
