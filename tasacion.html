@@ -126,6 +126,17 @@ nav{background:var(--nav-bg);padding:0 4rem;display:flex;align-items:center;just
 .load-msg{font-size:12px;color:var(--light);}
 
 
+/* DOCUMENTACION CHECKS */
+.doc-check-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border:1px solid var(--border);background:var(--cream2);cursor:pointer;transition:all 0.2s;margin-bottom:8px;}
+.doc-check-item:hover{border-color:var(--gold);background:#FEF9F0;}
+.doc-check-item.checked{border-color:var(--green);background:var(--green-bg);}
+.doc-check-box{width:20px;height:20px;border:2px solid var(--border);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;transition:all 0.2s;}
+.doc-check-item.checked .doc-check-box{background:var(--green);border-color:var(--green);color:#fff;}
+.doc-check-item.checked .doc-check-box::after{content:'✓';font-size:12px;font-weight:700;color:#fff;}
+.doc-check-label{font-size:13px;font-weight:600;color:var(--dark);}
+.doc-check-sub{font-size:11.5px;color:var(--light);margin-top:2px;}
+
+/* TERMOMETRO DE PRECISION - STICKY */
 /* TERMOMETRO DE PRECISION - STICKY */
 .prec-sticky{
   position:sticky;top:66px;z-index:99;
@@ -455,6 +466,46 @@ const _supabase = supabase.createClient('https://etftpmjekylnalxsgpbc.supabase.c
           <div class="fotos-counter" id="fotos-counter" style="display:none;"><span id="fotos-count">0</span> fotos cargadas</div>
           <div class="fotos-warning" id="fotos-warning">Recomendamos subir al menos 10 fotos para que el asesor pueda evaluar mejor tu propiedad.</div>
         </div>
+        <!-- DOCUMENTACION -->
+        <div style="margin-top:20px;" id="doc-section">
+          <div style="font-size:12px;font-weight:700;color:var(--dark);margin-bottom:4px;">Documentación disponible</div>
+          <div style="font-size:11.5px;color:var(--light);margin-bottom:12px;">Opcional · Indica qué documentos tenés en regla para una tasación más precisa</div>
+
+          <!-- Casa -->
+          <div id="doc-casa" style="display:none;">
+            <div class="doc-check-item" onclick="toggleDoc(this,'escritura_casa')">
+              <div class="doc-check-box" id="dc-escritura_casa"></div>
+              <div><div class="doc-check-label">Escritura en regla</div><div class="doc-check-sub">Título de propiedad vigente a tu nombre</div></div>
+            </div>
+            <div class="doc-check-item" onclick="toggleDoc(this,'planos_casa')">
+              <div class="doc-check-box" id="dc-planos_casa"></div>
+              <div><div class="doc-check-label">Planos</div><div class="doc-check-sub">Planos aprobados por el municipio</div></div>
+            </div>
+          </div>
+
+          <!-- Depto / PH -->
+          <div id="doc-depto" style="display:none;">
+            <div class="doc-check-item" onclick="toggleDoc(this,'escritura_depto')">
+              <div class="doc-check-box" id="dc-escritura_depto"></div>
+              <div><div class="doc-check-label">Escritura en regla</div><div class="doc-check-sub">Título de propiedad vigente a tu nombre</div></div>
+            </div>
+            <div class="doc-check-item" onclick="toggleDoc(this,'reglamento')">
+              <div class="doc-check-box" id="dc-reglamento"></div>
+              <div><div class="doc-check-label">Reglamento de copropiedad</div><div class="doc-check-sub">Documento del consorcio vigente</div></div>
+            </div>
+            <div class="doc-check-item" onclick="toggleDoc(this,'planos_muni')">
+              <div class="doc-check-box" id="dc-planos_muni"></div>
+              <div><div class="doc-check-label">Planos municipales</div><div class="doc-check-sub">Planos aprobados por el municipio</div></div>
+            </div>
+            <div class="doc-check-item" onclick="toggleDoc(this,'plano_ph')">
+              <div class="doc-check-box" id="dc-plano_ph"></div>
+              <div><div class="doc-check-label">Plano de PH</div><div class="doc-check-sub">Plano de propiedad horizontal</div></div>
+            </div>
+          </div>
+
+          <div style="font-size:11px;color:var(--light);margin-top:10px;font-style:italic;">Seleccioná el tipo de propiedad primero para ver las opciones correspondientes</div>
+        </div>
+
         <button class="analyze-btn" id="analyze-btn" onclick="runAnalysis()">Analizar mi propiedad →</button>
       </div>
     </div>
@@ -1035,43 +1086,19 @@ function closeModal(){document.getElementById('modal-bg').classList.remove('open
 
 // ACTUALIZAR PRECISION EN TIEMPO REAL
 document.addEventListener('DOMContentLoaded', function(){
-  // Zona
-  const zonaEl = document.getElementById('f-zona');
-  if(zonaEl) zonaEl.addEventListener('change', function(){
-    if(this.value) updatePrecision('zona');
+  document.addEventListener('change', function(e){
+    if(e.target.closest('#sec-form')) setTimeout(checkFormPrecision, 50);
   });
-
-  // Tipo
-  const tipoEl = document.getElementById('f-tipo');
-  if(tipoEl) tipoEl.addEventListener('change', function(){
-    if(this.value) updatePrecision('tipo');
+  document.addEventListener('input', function(e){
+    if(e.target.closest('#sec-form')) setTimeout(checkFormPrecision, 100);
   });
-
-  // Superficie
-  const supEl = document.getElementById('f-sup');
-  const ambEl = document.getElementById('f-amb');
-  if(supEl) supEl.addEventListener('input', function(){
-    if(this.value) updatePrecision('sup');
-  });
-  if(ambEl) ambEl.addEventListener('change', function(){
-    if(this.value) updatePrecision('sup');
-  });
-
-  // Estado
-  const selects = document.querySelectorAll('.fg3 select');
-  selects.forEach(sel => sel.addEventListener('change', function(){
-    updatePrecision('estado');
-  }));
-
-  // Extras
   document.querySelectorAll('.extra').forEach(el => {
-    el.addEventListener('click', function(){
-      setTimeout(()=>{
-        const on = document.querySelectorAll('.extra.on');
-        if(on.length > 0) updatePrecision('extras');
-      }, 50);
-    });
+    el.addEventListener('click', ()=>setTimeout(checkFormPrecision, 100));
   });
+  // Escuchar cambio de tipo para mostrar sección de docs correcta
+  const tipoEl = document.getElementById('f-tipo');
+  if(tipoEl) tipoEl.addEventListener('change', ()=>setTimeout(showDocSection, 50));
+  renderPrecision();
 });
 </script>
 </body>
