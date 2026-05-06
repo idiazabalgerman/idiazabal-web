@@ -443,5 +443,73 @@ function filterProps(el,type){
   });
 }
 </script>
+
+<script>
+// Cargar propiedades reales de Tokko al iniciar
+async function cargarPropiedades(operacion='venta', filtro='all'){
+  const grid = document.getElementById('prop-grid');
+  if(!grid) return;
+
+  grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--light);">Cargando propiedades...</div>';
+
+  try {
+    const res = await fetch(`/api/propiedades?operacion=${operacion}&limite=6`);
+    const data = await res.json();
+
+    if(!data.propiedades || data.propiedades.length === 0){
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--light);">No hay propiedades disponibles en este momento.</div>';
+      return;
+    }
+
+    grid.innerHTML = '';
+    data.propiedades.forEach(p => {
+      const precio = p.moneda === 'USD' ? `USD ${p.precio.toLocaleString('es-AR')}` : `$ ${p.precio.toLocaleString('es-AR')}`;
+      const foto = p.foto ? `<img src="${p.foto}" style="width:100%;height:100%;object-fit:cover;">` : `<svg width="100" height="80" viewBox="0 0 100 80" opacity="0.18"><rect x="15" y="28" width="70" height="46" rx="2" fill="#C9912E"/><polygon points="5,30 50,5 95,30" fill="#8B6214"/></svg>`;
+
+      const card = document.createElement('div');
+      card.className = 'prop-card';
+      card.dataset.type = p.tipo.toLowerCase().replace(' ', '');
+      card.innerHTML = `
+        <div class="prop-img" style="background:linear-gradient(140deg,#2C2A20,#1C1C1C);">
+          ${foto}
+          <span class="prop-badge">✦ Exclusiva</span>
+          <span class="prop-source">Idiazabal</span>
+        </div>
+        <div class="prop-body">
+          <div class="prop-priority">✦ Idiazabal — Prioridad</div>
+          <div class="prop-price">${precio} <small>${operacion}</small></div>
+          <div class="prop-title">${p.titulo || p.direccion}</div>
+          <div class="prop-feats">
+            ${p.ambientes ? `<span>🛏 ${p.ambientes} amb.</span>` : ''}
+            ${p.banos ? `<span>🚿 ${p.banos} baños</span>` : ''}
+            ${p.sup_cubierta ? `<span>📐 ${p.sup_cubierta} m²</span>` : ''}
+            ${p.cocheras ? `<span>🚗 Cochera</span>` : ''}
+          </div>
+          <button class="prop-cta" onclick="window.open('${p.url}','_blank')">Ver propiedad</button>
+        </div>
+      `;
+      grid.appendChild(card);
+    });
+  } catch(e) {
+    console.error('Error cargando propiedades:', e);
+    // Si falla, dejar las propiedades demo que ya están
+  }
+}
+
+// Cargar al iniciar
+document.addEventListener('DOMContentLoaded', () => cargarPropiedades('venta'));
+
+// Actualizar al cambiar tabs del buscador
+const tabOriginal = window.setTab;
+window.setTab = function(el){
+  if(tabOriginal) tabOriginal(el);
+  const txt = el.textContent.toLowerCase();
+  if(txt.includes('alquilar')) cargarPropiedades('alquiler');
+  else if(txt.includes('comprar')) cargarPropiedades('venta');
+};
+
+// Actualizar filterProps para filtrar propiedades reales
+</script>
+
 </body>
 </html>

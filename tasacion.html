@@ -820,13 +820,131 @@ function initPrecision(){
   if(document.getElementById('ai-success')?.style.display !== 'none') updatePrecision('escritura');
 }
 
-function buildChart(){
+async function buildChart(){
+  const zona = document.getElementById('f-zona')?.value || '';
+  const tipo = document.getElementById('f-tipo')?.value || '';
+  const sup = document.getElementById('f-sup')?.value || '0';
+  const amb = document.getElementById('f-amb')?.value || '0';
+
+  // Mostrar loading en tabla de comparables
+  const tbody = document.querySelector('.comp-card table tbody');
+  if(tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--light);">Buscando comparables en Tokko...</td></tr>';
+
+  try {
+    const res = await fetch(`/api/comparables?zona=${encodeURIComponent(zona)}&tipo=${encodeURIComponent(tipo)}&sup=${sup}&amb=${amb}`);
+    const data = await res.json();
+
+    if(data.estadisticas && data.estadisticas.precio_estimado > 0) {
+      // Actualizar precio estimado con dato real
+      const fmt = n => '$' + n.toLocaleString('es-AR');
+      const fmtUSD = n => 'USD ' + n.toLocaleString('es-AR');
+
+      document.getElementById('price-val') && (document.getElementById('price-val').textContent = fmtUSD(data.estadisticas.precio_estimado));
+      document.getElementById('price-display') && (document.getElementById('price-display').textContent = fmtUSD(data.estadisticas.precio_estimado));
+
+      // Rango
+      const rango = `Rango estimado: ${fmtUSD(data.estadisticas.precio_min)} — ${fmtUSD(data.estadisticas.precio_max)}`;
+      document.getElementById('range-display') && (document.getElementById('range-display').textContent = rango);
+
+      // Métricas
+      const metrics = document.querySelectorAll('.metric-val');
+      if(metrics[0]) metrics[0].textContent = 'USD ' + data.estadisticas.promedio_m2.toLocaleString('es-AR');
+      if(metrics[3]) metrics[3].textContent = data.estadisticas.total_comparables;
+
+      // Confianza
+      const confItems = document.querySelectorAll('.pstat-val');
+      if(confItems[0]) confItems[0].textContent = data.estadisticas.confianza + '%';
+      if(confItems[1]) confItems[1].textContent = data.estadisticas.total_comparables;
+      if(confItems[2]) confItems[2].textContent = 'USD ' + data.estadisticas.promedio_m2.toLocaleString('es-AR');
+    }
+
+    // Renderizar comparables reales
+    if(tbody && data.comparables && data.comparables.length > 0) {
+      tbody.innerHTML = '';
+      data.comparables.forEach(c => {
+        const tr = document.createElement('tr');
+        if(c.similitud >= 85) tr.className = 'hl';
+        tr.innerHTML = `
+          <td>
+            <strong style="color:var(--dark);">${c.titulo || c.direccion}</strong><br>
+            <span style="font-size:11px;color:var(--light);">${c.tipo} · ${c.barrio}</span>
+          </td>
+          <td>${c.sup_cubierta} m² / ${c.ambientes} amb.</td>
+          <td>
+            <strong>${c.moneda} ${c.precio.toLocaleString('es-AR')}</strong>
+            <div class="price-m2">${c.moneda} ${c.precio_m2.toLocaleString('es-AR')}/m²</div>
+          </td>
+          <td>${c.precio_m2.toLocaleString('es-AR')}</td>
+          <td>
+            <div class="match-bar"><div class="match-fill" style="width:${c.similitud}%;background:var(--gold);"></div></div>
+            ${c.similitud}%
+          </td>
+          <td><span class="tag own">Idiazabal</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    } else if(tbody) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--light);">No se encontraron comparables. Completá más datos para mejorar los resultados.</td></tr>';
+    }
+
+    // Construir gráfico con datos reales
+    buildChartConDatos(data.comparables || []);
+
+  } catch(e) {
+    console.error('Error al cargar comparables:', e);
+    buildChartDemo();
+  }
+}
+
+function buildChartConDatos(comparables){
+  const precios_m2 = comparables.map(c => c.precio_m2).filter(p => p > 0);
+  if(precios_m2.length === 0){ buildChartDemo(); return; }
+
+  const min = Math.min(...precios_m2);
+  const max = Math.max(...precios_m2);
+  const rango = max - min || 1;
+  const buckets = 6;
+  const paso = rango / buckets;
+
+  const data = [];
+  for(let i = 0; i < buckets; i++){
+    const desde = min + i * paso;
+    const hasta = desde + paso;
+    const count = precios_m2.filter(p => p >= desde && p < hasta).length;
+    data.push({
+      l: `USD ${Math.round(desde/1000)}k–${Math.round(hasta/1000)}k`,
+      n: count,
+      pct: Math.round((count / precios_m2.length) * 100),
+      hl: i >= 2 && i <= 3
+    });
+  }
+
+  const chart = document.getElementById('bar-chart');
+  if(!chart) return;
+  chart.innerHTML = '';
+  data.forEach(d => {
+    const col = document.createElement('div'); col.className = 'bar-col';
+    const wrap = document.createElement('div'); wrap.className = 'bar-wrap';
+    const bar = document.createElement('div'); bar.className = 'bar';
+    bar.style.height = Math.max(d.pct, 5) + '%';
+    bar.style.background = d.hl ? 'var(--gold)' : 'var(--border)';
+    wrap.appendChild(bar);
+    const nEl = document.createElement('div'); nEl.className = 'bar-n'; nEl.textContent = d.n;
+    const lEl = document.createElement('div'); lEl.className = 'bar-l'; lEl.textContent = d.l;
+    col.appendChild(nEl); col.appendChild(wrap); col.appendChild(lEl);
+    chart.appendChild(col);
+  });
+}
+
+function buildChartDemo(){
   const data=[
     {l:'USD 750–850',n:2,pct:22},{l:'USD 850–950',n:3,pct:33},
     {l:'USD 950–1.050',n:6,pct:60,hl:true},{l:'USD 1.050–1.150',n:7,pct:70,hl:true},
     {l:'USD 1.150–1.250',n:4,pct:42},{l:'USD 1.250+',n:1,pct:12},
   ];
-  const chart=document.getElementById('bar-chart');chart.innerHTML='';
+  const chart=document.getElementById('bar-chart');
+  if(!chart) return;
+  chart.innerHTML='';
   data.forEach(d=>{
     const col=document.createElement('div');col.className='bar-col';
     const wrap=document.createElement('div');wrap.className='bar-wrap';
